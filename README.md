@@ -13,8 +13,9 @@ Current counts (values, papers) are shown on the map page itself.
 A mark from the two models means *the sentence states this number* — not that an MXene researcher has confirmed it is the MXene's own value.
 No human expert check yet, so nothing is labelled "verified".
 
-**Questions, corrections, removal requests.** Please open an issue or a Q&A discussion at https://github.com/SongT-50/mxene-3d
+**Questions, corrections, removal requests.** Please open an issue or a Q&A discussion in this repository
 (rights holders who would like a paper's sentences removed: requests are handled promptly).
+Earlier comments (before 2026-10-17) are at https://github.com/SongT-50/mxene-3d/issues.
 
 **Licence.** © 2026 Tae-Eun Song, all rights reserved. Linking is welcome; please do not copy or redistribute without permission.
 
