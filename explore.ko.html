@@ -125,6 +125,7 @@ body.hero{background:transparent;overflow:hidden}
   #panel.open{display:block}
   #legend{font-size:10.5px}
 }
+.val .fbx button{font:inherit;font-size:11.5px;padding:1px 8px;margin:0 1px;border:1px solid var(--border,#444);border-radius:12px;background:transparent;color:inherit;cursor:pointer}.val .fbx button.on{background:#7aa2ff;color:#111;border-color:#7aa2ff}
 mark.hn{background:#ffe066;color:#111;padding:0 2px;border-radius:3px;font-weight:700}.val .fbx{margin-top:3px;font-size:11.5px}.val .fbx a{color:var(--accent,#8fa8ff)}.val .fbx .fbn{opacity:.7}
 </style>
 </head>
@@ -1373,7 +1374,7 @@ function checkCompQuests(c){
     const et=[...new Set(c.ok.filter(d=>d.u==="S/cm"&&d.v>10000).map(d=>d.et||ETN[d.e]||d.e))].slice(0,3);
     complete("q1",c.name+" — "+et.join(" / "));
   }
-  if(q2best&&c===q2best.c)complete("q2",c.name+" — "+q2best.d.vr+" "+(q2best.d.ur||"%"));
+  if(q2best&&c===q2best.c)complete("q2",c.name+" — "+(String(q2best.d.vr).trim().endsWith(q2best.d.ur||"%")?String(q2best.d.vr).trim():q2best.d.vr+" "+(q2best.d.ur||"%")));// 10/17: no double unit («66.69 % %») when the raw value text already ends with the unit
   if(q4best&&c===q4best)complete("q4",c.name+" — 값 "+c.all+"개");
 }
 function checkFogQuest(m,k){
@@ -1405,13 +1406,26 @@ document.getElementById("pclose").onclick=()=>panel.classList.remove("open");
 function numToks(t,loose){const re=loose?/(?<![\w.])(\d{1,3}(?:[, \u2009\u202f]\d{3})+(?!\d)|\d+|(?=\.\d))(\.\d+)?(?:\s*[eE]([-+\u2212]?\d+)|\s*[x\u00d7]\s*10\s*\^?\s*([-+\u2212\u2013]?)\s*(\d+)(?![\d.]))?/g:/(?<![\w.])(\d{1,3}(?:[,\u2009\u202f]\d{3})+(?!\d)|\d+|(?=\.\d))(\.\d+)?(?:\s*[eE]([-+\u2212]?\d+)|\s*[x\u00d7]\s*10\s*\^?\s*([-+\u2212\u2013]?)\s*(\d+)(?![\d.]))?/g;const out=[];let m;while((m=re.exec(t))){let val=Number(m[1].replace(/[, \u2009\u202f]/g,'')+(m[2]||''));if(m[3]!=null)val*=Math.pow(10,Number(m[3].replace('\u2212','-')));if(m[5]!=null)val*=Math.pow(10,(/[-\u2212\u2013]/.test(m[4])?-1:1)*Number(m[5]));const pre=t.slice(Math.max(0,m.index-4),m.index);if(/[A-Za-z][-\u2212]$/.test(pre))continue;if(/[-\u2212]$/.test(pre)&&!/[\d)%.][-\u2212]$/.test(pre))val=-val;out.push({i:m.index,len:m[0].length,val})}return out}
 function numHit(t,v){const x=Number(v);if(!isFinite(x))return null;const eq=k=>k.val===x||Math.abs(k.val-x)<=1e-9*Math.abs(x);const a=numToks(t).find(eq);if(a)return a;const b=numToks(t,1).find(eq);return b?Object.assign(b,{loose:1}):null}
 function qSnip(q,v){const t=String(q||'');const k=numHit(t,v);if(!k||k.i<200)return t.slice(0,240);return '…'+t.slice(k.i-120,k.i+k.len+120)+'…'}
-function exHi(d){const t=String(d.q||'');const k=numHit(t,d.v);if(!k)return{h:esc(t),f:false};return{h:esc(t.slice(0,k.i))+'<mark class="hn">'+esc(t.slice(k.i,k.i+k.len))+'</mark>'+esc(t.slice(k.i+k.len)),f:true}}
-function exUrl(d,ok){const val=vtxt(d);const title=(ok?'✅ matches the sentence':'❌ differs from the sentence')+' — '+val+' — '+String(d.l||'').slice(0,60);const body=['Vote: '+(ok?'✅ the value matches the source sentence':'❌ the value differs from the source sentence (number, sample or condition)'),'Value: '+val,'Sample: '+(d.l||''),'Etching: '+(d.et||d.e||'-'),'Paper: '+(d.d?'https://doi.org/'+d.d:(d.p||'')),'Quote: '+qSnip(d.q,d.v),'Note: -','','(from the MXene Atlas explore page)'].join('\n');return 'https://github.com/SongT-50/mxene-3d/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)}
+// 10/17: 인용 앞 [회차·판정] 꼬리표는 바깥 사람이 못 읽는다 → 문장에서 떼고 «자세히」 안에
+// warnings a reader needs (range check, do-not-compare, suspected cited value, strict-tab rule, not passed) stay visible; round/judge log folds away
+const EXWARN=/범위 점검|범위 표시|인용값|⚠|미통과|비교 금지|\bD\d+[:·]|D16|표본 적음|◐|[Rr]ange (check|note)|cited|not passed|do not compare|small sample|strict tab/;
+function exTags(d){return (String(d.q||'').match(/^(\s*\[[^\]]*\]\s*)+/)||[''])[0].match(/\[[^\]]*\]/g)||[]}
+function vKey(d){const s=String(d.p||'')+'|'+String(d.vr||d.v)+'|'+String(d.l||'').slice(0,60);let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return String(d.p||'x').replace(/[^A-Za-z0-9]/g,'').slice(0,24)+'-'+(h>>>0).toString(36)}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-xv]');if(!b)return;const k=b.dataset.k,c=b.dataset.xv;let dup=false;
+ try{const s=JSON.parse(localStorage.getItem('mxv1')||'{}');dup=!!s[k];s[k]=c;localStorage.setItem('mxv1',JSON.stringify(s))}catch(x){}
+ if(!dup&&window.goatcounter&&window.goatcounter.count){try{window.goatcounter.count({path:'vote/'+c+'/'+k,title:'vote '+c+' · '+(b.dataset.t||''),event:true})}catch(x){}}
+ const row=b.closest('.fbx');row.querySelectorAll('button[data-xv]').forEach(x=>x.classList.toggle('on',x===b));const n=row.querySelector('.fbn');if(n)n.textContent=dup?'이미 답했어요 🙏':'고마워요 🙏 기록됐어요'});
+function exHi(d){const t=String(d.q||'').replace(/^(\s*\[[^\]]*\]\s*)+/,'');const k=numHit(t,d.v);if(!k)return{h:esc(t),f:false};return{h:esc(t.slice(0,k.i))+'<mark class="hn">'+esc(t.slice(k.i,k.i+k.len))+'</mark>'+esc(t.slice(k.i+k.len)),f:true}}
+function exUrl(d,ok){const val=vtxt(d);const title='💬 Comment on a value — '+val+' — '+String(d.l||'').slice(0,60);const body=['Comment: (write here)','Value: '+val,'Sample: '+(d.l||''),'Etching: '+(d.et||d.e||'-'),'Paper: '+(d.d?'https://doi.org/'+d.d:(d.p||'')),'Quote: '+qSnip(d.q,d.v),'Note: -','','(from the MXene Atlas explore page)'].join('\n');return 'https://github.com/SongT-50/mxene-3d/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body)}
 function valHTML(d){
   const doi=d.d?'<a href="https://doi.org/'+esc(d.d)+'" target="_blank" rel="noopener">doi:'+esc(d.d)+'</a>':(d.p?esc(d.p):"");
   return '<div class="val"><span class="num">● '+esc(vtxt(d))+'</span> <span class="meta">'+esc(PNAME[d.u]||d.u)+(d.l?' · 시료: '+esc(d.l):'')+(d.fm?' · '+esc(d.fm):'')+'</span>'+
    '<q>'+exHi(d).h+'</q><div class="meta">약품: '+esc(d.et||ETN[d.e]||d.e||"모름")+' · '+doi+'</div>'+
-   '<div class="meta fbx">'+(exHi(d).f?'':'⚠ 이 숫자를 문장에서 그대로 못 찾았어요(단위 환산일 수 있어요) · ')+'노란 숫자를 문장에서 제대로 골랐나요? <a href="'+esc(exUrl(d,1))+'" target="_blank" rel="noopener">✅ 맞아요</a> · <a href="'+esc(exUrl(d,0))+'" target="_blank" rel="noopener">❌ 달라요</a> <span class="fbn">(GitHub · 공개)</span></div></div>';
+   exTags(d).filter(x=>EXWARN.test(x)).map(x=>'<div class="meta" style="color:#f5b14c">'+esc(x)+'</div>').join('')+
+   (exTags(d).some(x=>!EXWARN.test(x))?'<details class="meta"><summary>자세히(작업 기록)</summary>'+exTags(d).filter(x=>!EXWARN.test(x)).map(esc).join('<br>')+'</details>':'')+
+   '<div class="meta fbx">'+(exHi(d).f?'':'⚠ 이 숫자를 문장에서 그대로 못 찾았어요(단위 환산일 수 있어요) · ')+'이 값을 «'+esc(d.m||'MXene')+'»의 값으로 치겠어요? '+
+   ['alone','comp','no'].map((c,i)=>'<button type="button" data-xv="'+c+'" data-k="'+esc(vKey(d))+'" data-t="'+esc(String(d.m||'')+' · '+String(d.l||'').slice(0,50))+'">'+['✅ MXene 자체','🔀 섞인 시료','❌ 아님'][i]+'</button>').join(' ')+
+   ' <span class="fbn">(한 번 누르기 · 로그인 없음 · 익명)</span> · <a href="'+esc(exUrl(d,1))+'" target="_blank" rel="noopener">💬 글 의견</a></div></div>';
 }
 let lastComp=null, panelKind="";
 function showComp(c){
