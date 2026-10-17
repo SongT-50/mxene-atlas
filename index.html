@@ -180,7 +180,7 @@ function fbBind(d,box,after){if(!box)return;const g=box.querySelector('a.fbg');i
   box.querySelector('.fbmsg').textContent=dup?'Already answered — a changed answer stays only in this browser 🙏':'Thank you 🙏 — recorded';if(after)after()}))}
 let P5=0,P5T=0,P5d=null,P5Q=[];function p5start(){const V=(window._VIS||[]).filter(d=>d&&d.q&&!String(d.s||'').startsWith('judged_error')&&!d.chk);const S=V.slice();for(let i=S.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[S[i],S[j]]=[S[j],S[i]]}
  // 10/17: 정의가 애매한 Value(섞은 물질 · 엄격 표 제외 · 층 사이 이온)만 먼저 — 답 하나하나가 규칙이 되게
- const edge=S.filter(d=>(d.pc&&d.pc.length)||d.strict===false||d.ions||/\+/.test(String(d.m||'')));P5Q=edge.slice(0,5);S.forEach(d=>{if(P5Q.length<5&&!P5Q.includes(d))P5Q.push(d)});P5T=P5Q.length}
+ const edge=S.filter(d=>(d.pc&&d.pc.length)||d.ions||/\+/.test(String(d.m||'')));/* strict false = 59% too broad -> values with a stated partner material (36%) */P5Q=edge.slice(0,5);S.forEach(d=>{if(P5Q.length<5&&!P5Q.includes(d))P5Q.push(d)});P5T=P5Q.length}
 function p5pick(){return P5Q.length?P5Q.shift():null}
 function p5show(){let box=document.getElementById('p5box');const anchor=document.getElementById('v3help')||document.getElementById('play5');if(!box){box=document.createElement('div');box.id='p5box';anchor.after(box)}
  if(P5T&&P5>=P5T){box.innerHTML=`<div class=p5h><b>${P5}/${P5T} — done! Thank you for looking with us 🙏</b><button class=p5x data-x=1>Close ✕</button></div><div class=dim>We will use your notes when we fix the map · press «🎲» again to do more</div>`;box.querySelector('[data-x]').onclick=()=>{box.remove();P5=0};return}
