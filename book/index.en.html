@@ -189,8 +189,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li><span class="n">6</span><a href="#ch6">What the map has gathered — ten properties</a></li>
 <li><span class="n">7</span><a href="#ch7">2026-10-09 — the map widens, and the map is tested</a></li>
 <li><span class="n">8</span><a href="#ch8">When we changed the rules, when we chose the papers — the promises we kept</a></li>
-<li><span class="n">9</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
-<li><span class="n">10</span><a href="#ch10">Where this map came from, and where it is going</a></li>
+<li><span class="n">9</span><a href="#ch8b">From numbers to recipes — 16–19 October</a></li>
+<li><span class="n">10</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
+<li><span class="n">11</span><a href="#ch10">Where this map came from, and where it is going</a></li>
 </ol>
 </nav>
 </section>
@@ -884,6 +885,52 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </ol></aside>
 </section>
 
+<section class="chapter" id="ch8b">
+<div class="opener">
+<figure>
+<svg aria-label="Four boxes, precursor, etching, delamination, processing, joined by arrows; below, two judges A and B check each box against the source" role="img" viewbox="0 0 1000 380">
+<rect fill="#f1ecdf" height="380" width="1000"></rect>
+<g fill="#3d3d44" font-size="24" text-anchor="middle">
+<g transform="translate(60,120)"><rect fill="#fff" height="110" rx="10" stroke="#2b3a67" stroke-width="3" width="180"></rect><text x="90" y="65">Precursor</text></g>
+<g transform="translate(300,120)"><rect fill="#fff" height="110" rx="10" stroke="#2b3a67" stroke-width="3" width="180"></rect><text x="90" y="65">Etching</text></g>
+<g transform="translate(540,120)"><rect fill="#fff" height="110" rx="10" stroke="#2b3a67" stroke-width="3" width="180"></rect><text x="90" y="65">Delamination</text></g>
+<g transform="translate(780,120)"><rect fill="#fff" height="110" rx="10" stroke="#c8962a" stroke-width="3" width="180"></rect><text x="90" y="65">Processing</text></g>
+<g fill="none" stroke="#3d3d44" stroke-width="3"><path d="M245 175 H292"></path><path d="M485 175 H532"></path><path d="M725 175 H772"></path></g>
+<g transform="translate(130,292)"><circle cx="0" cy="0" fill="#1f7a72" r="22"></circle><text fill="#fff" font-size="20" x="0" y="8">A</text></g>
+<g transform="translate(870,292)"><circle cx="0" cy="0" fill="#d9534f" r="22"></circle><text fill="#fff" font-size="20" x="0" y="8">B</text></g>
+<text font-size="22" x="500" y="300">Two judges check each step against the paper</text>
+<text fill="#2b3a67" font-size="26" x="500" y="70">One value → how was that sample made?</text>
+</g>
+</svg>
+<figcaption>Click a value and the map shows how a sample from that paper was made, from precursor to processing. Each step carries its source sentence, and only steps both judges accept are shown.</figcaption>
+</figure>
+<div class="kicker">Chapter 9</div>
+<h2>From numbers to recipes — 16–19 October</h2>
+<p class="hook">Values matching their source passed almost every time. But what a researcher really asks is “how was the sample behind this value made?” Over four days we attached that answer to the map. The first two attempts failed, and we wrote down why.</p>
+</div>
+<div class="prose">
+<h3>The first comparison with a human-made answer key</h3>
+<p>Until now the test was “do two AI judges say the value matches the source?” That alone does not tell how often we are right by a human standard. So we ran the same method on a public answer key that another group built by hand (about 600 rows of conductivity, thickness and similar values).</p>
+<p><b>Recall 97.4%</b> — almost every value the people recorded, we found. <b>Precision 83.1%</b> — a fair number of our rows were not in their key. Opening those 45 rows, 41 were ones both AI judges had found stated in the source. They are in the paper, but people had left them out as “not a value of that material.”</p>
+<blockquote class="pull span">AI judges are good at “is this written in the paper?” Whether a value counts as the material’s own value is a human definition — two AIs cannot settle it for us.</blockquote>
+<h3>Four recipe steps — precursor, etching, delamination, processing</h3>
+<p>For each paper we took one representative sample and extracted, with source sentences, how the precursor (MAX phase) was obtained, how it was etched, how the layers were opened, and how the measured form (film, electrode, powder) was made. As with values, two judges check each step against the paper, and only steps both accept appear on the map.</p>
+<h3>Two failed rounds, then people rebuilt the test sheet</h3>
+<p>Every judging round hides trap items whose answer we know (a changed number, text from another paper, a missing step). The first two rounds were void — not because the judges failed, but because <b>the traps we generated by machine mixed “right” and “wrong” items.</b> In the third round, the traps that are hard to generate were picked by hand, opening each source. Both judges caught all 32 traps, and 88% of real steps passed.</p>
+<h3>What looked “missing” was in the next box</h3>
+<p>Processing was the weakest step (74%). Reading the failures, many said “the heat treatment is missing.” But heat treatment had been extracted into a separate “post-treatment” box that we never sent to the judges. Asking again with processing and post-treatment joined, the same papers went from <b>33% to 91.5%</b>; the round as a whole passed at 92%. (The definition of “processing” given to the judges also changed by one sentence, so the gain cannot be split between the two.)</p>
+<h3>The map now</h3>
+<p>Of 4,097 values (768 papers), 3,962 now carry a recipe (756 papers). On first visit the map opens a “one question, three clicks” guide; press “Show me” and it walks through it by itself.</p>
+<h3>What we must still state plainly</h3>
+<ul>
+<li><b>Each recipe belongs to one named sample per paper.</b> Clicking another sample’s value from the same paper can show a different sample’s recipe (e.g. a pH 4 gel’s recipe on a pH 10 gel’s value). The sample name is shown with it.</li>
+<li>“Matches the paper” does not mean the paper is right.</li>
+<li>No value has been checked by a human expert yet.</li>
+<li>On 20 fixed real questions, the share answered down to the recipe with source sentences is 81%; counting only cases where the recipe’s sample matches the value’s sample, 79%.</li>
+</ul>
+</div>
+</section>
+
 <section class="chapter" id="ch9">
 <div class="opener">
 <figure>
@@ -908,7 +955,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>Figure 9-1 · A map is useful at two moments: when it shows a “gap” no one has measured yet, and when, after a human expert's check, it becomes trustworthy.</figcaption>
 </figure>
-<div class="kicker">Chapter 9</div>
+<div class="kicker">Chapter 10</div>
 <h2>What we still don't know · what we will fill in when data arrive</h2>
 <p class="hook">This map is not yet “verified,” because both judges are AI. And there are questions closed as “undetermined.” They are not failures but places to fill when data arrive.</p>
 </div>
@@ -998,7 +1045,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>The methods learned in four research notes led to this map, and I hope the same methods will one day spread to other maps.</figcaption>
 </figure>
-<div class="kicker">Chapter 10</div>
+<div class="kicker">Chapter 11</div>
 <h2>Where this map came from, and where it is going</h2>
 <p class="hook">The verification method of this map did not appear out of nowhere. It stands on four research notes I wrote earlier. And this map is not the end, either.</p>
 </div>
