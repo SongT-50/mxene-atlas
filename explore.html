@@ -23,6 +23,9 @@ h1{font-size:19px;margin:0;font-weight:800}
 .chip{background:var(--bg-card);color:var(--fg);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .chip small{color:var(--fg-dim);margin-left:4px;font-size:11px}
 .chip.on{background:#1f3550;border-color:var(--accent)}
+.chip.tomap{border-color:#f5b14c;color:#f5b14c;text-decoration:none;font-weight:600}
+.xnew{margin:4px 16px 2px;padding:6px 12px;border:1px solid #f5b14c;border-radius:10px;font-size:12.5px;color:var(--fg)}
+.xnew a{color:#f5b14c}
 .honest{margin:0 16px 8px;padding:7px 11px;border-left:3px solid var(--yellow);background:#1b1a12;font-size:12.5px;line-height:1.55;color:#f1e7c4;border-radius:4px}
 .stage{position:relative;width:100%;height:70vh;min-height:360px;background:radial-gradient(ellipse at 50% 30%,#18213a 0%,#0a0a12 75%);overflow:hidden}
 #view{position:absolute;inset:0}
@@ -138,6 +141,7 @@ mark.hn{background:#ffe066;color:#111;padding:0 2px;border-radius:3px;font-weigh
   <button id="gapOpen" type="button" aria-expanded="false" aria-controls="gapBox">🧩 To fill when data arrives</button>
   <span class="toplinks"><a href="index.html">🗺 Map</a><a href="explore.ko.html" class="lang">한국어</a></span>
 </header>
+<div class="xnew">🆕 10/21 — 6 sensor properties added as towers · pick a property chip, then «🗺 See on the map» for its distribution · <a href="index.en.html#tgt">find by target value (reverse question)</a> · every map tool has «▶ Show me»</div>
 <div class="chips" id="chips"></div>
 <div class="honest">Tower height = how many values we collected, not a ‘good material’ · values were checked against the source by two AI judges (before human check · not «verified»)</div>
 <div id="gapBox" hidden><b>🧩 To fill when data arrives</b>
@@ -1313,10 +1317,11 @@ function vtxt(d){const v=String(d.vr!=null?d.vr:d.v), u=String(d.ur||d.u||""), n
 function fmt(n){return (Math.round(n*100)/100).toLocaleString("en-US");}
 
 const PROPS=[
- {k:"S/cm",n:"Electrical conductivity",g:0},{k:"F/g",n:"Capacitance (per mass)",g:0},{k:"전지 mAh/g",n:"Battery capacity",g:0},
+ {k:"S/cm",n:"Electrical conductivity",g:0},{k:"Ω/sq",n:"Sheet resistance",g:0},{k:"F/g",n:"Capacitance (per mass)",g:0},{k:"F/cm³",n:"Capacitance (volumetric)",g:0},{k:"전지 mAh/g",n:"Battery capacity",g:0},
  {k:"EMI dB(총)",n:"EMI shielding",g:1},{k:"광열 효율 %",n:"Photothermal efficiency",g:1},{k:"열전도도 W/mK",n:"Thermal conductivity",g:1},
- {k:"일함수 eV",n:"Work function",g:2},{k:"BET m²/g",n:"Surface area (BET)",g:2},{k:"층간거리 Å",n:"Interlayer spacing",g:2}];
-const GROUPS=["Electrical · energy","Light · heat · EMI","Structure · surface"];
+ {k:"일함수 eV",n:"Work function",g:2},{k:"BET m²/g",n:"Surface area (BET)",g:2},{k:"층간거리 Å",n:"Interlayer spacing",g:2},{k:"c 격자 Å",n:"c lattice parameter",g:2},
+ {k:"압력 감도 kPa⁻¹",n:"Pressure sensitivity",g:3},{k:"게이지 인자",n:"Gauge factor",g:3},{k:"응답 시간",n:"Response time",g:3},{k:"가스 응답 %",n:"Gas response",g:3},{k:"전기화학 검출 한계",n:"Electrochemical detection limit",g:3},{k:"가스 검출 한계",n:"Gas detection limit",g:3}];
+const GROUPS=["Electrical · energy","Light · heat · EMI","Structure · surface","Sensors 🆕"];
 const PK=PROPS.map(p=>p.k), PNAME={}; PROPS.forEach(p=>PNAME[p.k]=p.n);
 const ETN={"HF":"HF","HF+HCl":"HF+HCl","salt":"fluoride salt + acid","LiF/HCl":"LiF/HCl","molten_salt":"molten salt","other":"other","unknown":"unknown (not in source)"};
 const METALS={Sc:[0,0],Ti:[1,0],V:[2,0],Cr:[3,0],Y:[0,1],Zr:[1,1],Nb:[2,1],Mo:[3,1],Hf:[1,2],Ta:[2,2],W:[3,2]};
@@ -1387,8 +1392,10 @@ function renderChips(){
   const el=document.getElementById("chips");
   let h='<div class="grp"><button class="chip'+(cur==="ALL"?" on":"")+'" data-k="ALL">All<small>'+compList.reduce((s,c)=>s+c.all,0)+'</small></button></div>';
   GROUPS.forEach((g,gi)=>{
-    h+='<div class="grp"><span>'+g+'</span>'+PROPS.filter(p=>p.g===gi).map(p=>'<button class="chip'+(cur===p.k?" on":"")+'" data-k="'+esc(p.k)+'">'+esc(p.n)+'<small>'+propTotal[p.k]+'</small></button>').join("")+'</div>';
+    h+='<div class="grp"><span>'+g+'</span>'+PROPS.filter(p=>p.g===gi&&propTotal[p.k]).map(p=>'<button class="chip'+(cur===p.k?" on":"")+'" data-k="'+esc(p.k)+'">'+esc(p.n)+'<small>'+propTotal[p.k]+'</small></button>').join("")+'</div>';
   });
+
+  if(cur!=="ALL")h+='<div class="grp"><a class="chip tomap" href="index.en.html#u='+encodeURIComponent(cur)+'">🗺 See this property on the map — distribution · find by target →</a></div>';
   el.innerHTML=h;
 }
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(!b)return;setProp(b.dataset.k);});

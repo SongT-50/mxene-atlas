@@ -23,6 +23,9 @@ h1{font-size:19px;margin:0;font-weight:800}
 .chip{background:var(--bg-card);color:var(--fg);border:1px solid var(--border);border-radius:14px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .chip small{color:var(--fg-dim);margin-left:4px;font-size:11px}
 .chip.on{background:#1f3550;border-color:var(--accent)}
+.chip.tomap{border-color:#f5b14c;color:#f5b14c;text-decoration:none;font-weight:600}
+.xnew{margin:4px 16px 2px;padding:6px 12px;border:1px solid #f5b14c;border-radius:10px;font-size:12.5px;color:var(--fg)}
+.xnew a{color:#f5b14c}
 .honest{margin:0 16px 8px;padding:7px 11px;border-left:3px solid var(--yellow);background:#1b1a12;font-size:12.5px;line-height:1.55;color:#f1e7c4;border-radius:4px}
 .stage{position:relative;width:100%;height:70vh;min-height:360px;background:radial-gradient(ellipse at 50% 30%,#18213a 0%,#0a0a12 75%);overflow:hidden}
 #view{position:absolute;inset:0}
@@ -138,6 +141,7 @@ mark.hn{background:#ffe066;color:#111;padding:0 2px;border-radius:3px;font-weigh
   <button id="gapOpen" type="button" aria-expanded="false" aria-controls="gapBox">🧩 자료 오면 채울 것</button>
   <span class="toplinks"><a href="ko.html">🗺 지도</a><a href="explore.html" class="lang">English</a></span>
 </header>
+<div class="xnew">🆕 10/21 — 센서 6칸이 탑에 더해졌어요 · 성질 칩을 고르면 «🗺 지도에서 보기»로 분포 · <a href="index.html#tgt">목표값으로 찾기(거꾸로 질문)</a> · 지도의 기능마다 «▶ 보여 주기»</div>
 <div class="chips" id="chips"></div>
 <div class="honest">탑 높이 = 우리가 모은 값의 개수이지 ‘좋은 물질’이 아니다 · 값은 AI 판정자 둘이 원문과 대조(사람 확인 전 · «검증됨» 아님)</div>
 <div id="gapBox" hidden><b>🧩 자료 오면 채울 것</b>
@@ -1313,10 +1317,11 @@ function vtxt(d){const v=String(d.vr!=null?d.vr:d.v), u=String(d.ur||d.u||""), n
 function fmt(n){return (Math.round(n*100)/100).toLocaleString("en-US");}
 
 const PROPS=[
- {k:"S/cm",n:"전기 전도도",g:0},{k:"F/g",n:"정전용량(무게당)",g:0},{k:"전지 mAh/g",n:"전지 용량",g:0},
+ {k:"S/cm",n:"전기 전도도",g:0},{k:"Ω/sq",n:"면저항",g:0},{k:"F/g",n:"정전용량(무게당)",g:0},{k:"F/cm³",n:"정전용량(부피당)",g:0},{k:"전지 mAh/g",n:"전지 용량",g:0},
  {k:"EMI dB(총)",n:"전자파 차폐",g:1},{k:"광열 효율 %",n:"광열 효율",g:1},{k:"열전도도 W/mK",n:"열전도도",g:1},
- {k:"일함수 eV",n:"일함수",g:2},{k:"BET m²/g",n:"비표면적(BET)",g:2},{k:"층간거리 Å",n:"층간거리",g:2}];
-const GROUPS=["전기·에너지","빛·열·전자파","구조·표면"];
+ {k:"일함수 eV",n:"일함수",g:2},{k:"BET m²/g",n:"비표면적(BET)",g:2},{k:"층간거리 Å",n:"층간거리",g:2},{k:"c 격자 Å",n:"c 격자상수",g:2},
+ {k:"압력 감도 kPa⁻¹",n:"압력 감도",g:3},{k:"게이지 인자",n:"게이지 인자",g:3},{k:"응답 시간",n:"응답 시간",g:3},{k:"가스 응답 %",n:"가스 응답",g:3},{k:"전기화학 검출 한계",n:"전기화학 검출 한계",g:3},{k:"가스 검출 한계",n:"가스 검출 한계",g:3}];
+const GROUPS=["전기·에너지","빛·열·전자파","구조·표면","센서 🆕"];
 const PK=PROPS.map(p=>p.k), PNAME={}; PROPS.forEach(p=>PNAME[p.k]=p.n);
 const ETN={"HF":"HF","HF+HCl":"HF+HCl","salt":"불화염+산","LiF/HCl":"LiF/HCl","molten_salt":"용융염","other":"기타","unknown":"모름(원문에 없음)"};
 const METALS={Sc:[0,0],Ti:[1,0],V:[2,0],Cr:[3,0],Y:[0,1],Zr:[1,1],Nb:[2,1],Mo:[3,1],Hf:[1,2],Ta:[2,2],W:[3,2]};
@@ -1387,8 +1392,10 @@ function renderChips(){
   const el=document.getElementById("chips");
   let h='<div class="grp"><button class="chip'+(cur==="ALL"?" on":"")+'" data-k="ALL">전체<small>'+compList.reduce((s,c)=>s+c.all,0)+'</small></button></div>';
   GROUPS.forEach((g,gi)=>{
-    h+='<div class="grp"><span>'+g+'</span>'+PROPS.filter(p=>p.g===gi).map(p=>'<button class="chip'+(cur===p.k?" on":"")+'" data-k="'+esc(p.k)+'">'+esc(p.n)+'<small>'+propTotal[p.k]+'</small></button>').join("")+'</div>';
+    h+='<div class="grp"><span>'+g+'</span>'+PROPS.filter(p=>p.g===gi&&propTotal[p.k]).map(p=>'<button class="chip'+(cur===p.k?" on":"")+'" data-k="'+esc(p.k)+'">'+esc(p.n)+'<small>'+propTotal[p.k]+'</small></button>').join("")+'</div>';
   });
+
+  if(cur!=="ALL")h+='<div class="grp"><a class="chip tomap" href="index.html#u='+encodeURIComponent(cur)+'">🗺 이 성질을 지도에서 보기 — 분포 · 목표값으로 찾기 →</a></div>';
   el.innerHTML=h;
 }
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-k]");if(!b)return;setProp(b.dataset.k);});

@@ -729,7 +729,11 @@ demoBtn('v3exp',demoExp,T('▶ 보여 주기 — 성질 고르기 → 분포 →
 demoBtn('v3ask',demo,T('▶ 보여 주기 — 예시 질문 하나를 따라 해 봅니다(약 10초)','▶ Show me — walk through one example question (about 10 s)'));
 demoBtn('v3tgt',demoTgt,T('▶ 보여 주기 — 성질 고르기 → 목표값 넣기 → 찾기 → 결과 읽는 법(약 20초)','▶ Show me — pick a property → enter a target → Find → how to read the result (about 20 s)'));
 demoBtn('v3cmp',demoCmp,T('▶ 보여 주기 — 같은 방법인데 값이 다른 논문 둘을 나란히(약 15초)','▶ Show me — two papers with the same recipe but different values, side by side (about 15 s)'));
-if(!seen())setTimeout(open,1200);
+// 10/21 3D 탐험에서 «🗺 지도에서 보기」로 들어오면 그 성질 분포를 바로 연다(#u=<성질> · #tgt = 목표값으로 찾기)
+{const h=decodeURIComponent((location.hash||'').slice(1));
+ if(h.startsWith('u=')){const u=h.slice(2),sel=document.getElementById('v3prop');if(sel&&[...sel.options].some(o=>o.value===u)){sel.value=u;sel.dispatchEvent(new Event('change'));tab('#v3exp','dist');setTimeout(()=>{const x=document.getElementById('v3exp');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},300)}mark()}
+ else if(h==='tgt'){tab('#v3find','tgt');setTimeout(()=>{const x=document.getElementById('v3find');if(x)x.scrollIntoView({behavior:'smooth',block:'start'})},300);mark()}}
+if(!seen()&&!location.hash)setTimeout(open,1200);
 }catch(e){console.error('howto layer',e)}})();
 </script>
 <script data-goatcounter="https://mxene-atlas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
