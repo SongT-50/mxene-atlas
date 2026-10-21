@@ -190,8 +190,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li><span class="n">7</span><a href="#ch7">2026-10-09 — the map widens, and the map is tested</a></li>
 <li><span class="n">8</span><a href="#ch8">When we changed the rules, when we chose the papers — the promises we kept</a></li>
 <li><span class="n">9</span><a href="#ch8b">From numbers to recipes — 16–19 October</a></li>
-<li><span class="n">10</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
-<li><span class="n">11</span><a href="#ch10">Where this map came from, and where it is going</a></li>
+<li><span class="n">10</span><a href="#ch8c">Transplanting the method, and a first application property — 20–21 October</a></li>
+<li><span class="n">11</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
+<li><span class="n">12</span><a href="#ch10">Where this map came from, and where it is going</a></li>
 </ol>
 </nav>
 </section>
@@ -941,6 +942,38 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </ol></aside>
 </section>
 
+<section class="chapter" id="ch8c">
+<div class="opener">
+<div class="kicker">Chapter 10</div>
+<h2>Transplanting the method, and a first application property — 20–21 October</h2>
+<p class="hook">To see whether the method tuned on MXene stands outside MXene, we moved it to perovskite solar cells — a field with a human-made answer key, so scores could be measured directly. And the MXene map got its first «what is it used for» property: sensors.</p>
+</div>
+<div class="prose">
+<h3>Perovskites — seven rounds, and «30 papers wobble»</h3>
+<p>We compared our extraction with a public answer key (the Perovskite Database · values copied by hand from papers · CC BY 4.0), drawing 30 new papers per round. In the rounds where we changed the instructions, the «how it was made» score passed the 80% bar (83.4%, 87.4%); re-measured on 30 fresh papers with the instructions <b>unchanged</b>, it fell to 79.1% and 71.8%.</p>
+<p>At this size we could not tell whether a score rose because one line of the instructions was better or because those 30 papers were easier. Pooled over four rounds: 81.2% with the first rules, 79.3% with the revised rules — no visible effect. So we closed the rounds without writing «passed».</p>
+<blockquote class="pull span">A single 30-paper round swings by about 15 points. A rise inside that swing does not show that a change helped.</blockquote>
+<p>What we learned went into the tool that opens the next field: a round does not start unless there is a document saying how the field’s answer key was recorded, and with fewer than 60 papers it runs only as a «test round». It is a place where the tool stops, not a promise someone has to remember.</p>
+<h3>Sensors — the map’s first application property</h3>
+<p>For the first time we collected values of «what it is used for» rather than properties of the material itself. A 30-paper test round first: of 76 lines, 97.4% were found in the source by both AI judges. The two misses sat on definition boundaries — a fluorescence detection limit filed as «electrochemical», a recovery time written as response time — so before the main round we added two definitions (response time = rise time only · optically measured detection limits kept separate).</p>
+<p>Main round, 60 papers: 175 lines from 48 papers. Both judges caught all 18 planted traps; <b>92.9%</b> of the real lines were supported by both, 3.5% wrong — passed. The map gained six properties (pressure sensitivity · gauge factor · response time · gas response · gas detection limit · electrochemical detection limit), <b>214 values from 62 papers</b>. Papers mix ppm and ppb, μM and nM, s and ms; the map shows one unit and keeps the source value and unit alongside.</p>
+<h3>Our own mistakes — caught before release, and one after</h3>
+<p>The unit code got two things wrong: it missed the Unicode minus «−», so 8 negative values came in as positive, and it read «10⁻¹⁴ M» as «10 M» (one character turned into another while code went through the shell — a trap already written in our rules). Both were caught before release by scanning value ranges.</p>
+<p>That night, while testing a new «compare list» in the 3D explorer, we found one more: 7 older conductivity values had lost the «×10⁻⁵» of «4.77×10⁻⁵» and were shown as 4.77 (already public). We fixed them in the map build and logged it in the map’s «🕒 How it grew» for that day.</p>
+<blockquote class="pull span">The two judges check that a value matches its source sentence. Turning that value into the number on screen is our code, which the judges do not see — so we scan value ranges once more before release.</blockquote>
+<h3>Next — desalination, then MOF·COF</h3>
+<ul>
+<li><b>Desalination</b> — of 57 open-access MXene desalination papers, all 34 not yet on the map are running as one round (CDI · solar evaporation · membranes). It is small, so results will be stated as «in these 34 papers», not «in desalination».</li>
+<li><b>MXene + MOF·COF composites</b> — after that. A map of MOF·COF themselves will be opened with checks from experts in that field.</li>
+</ul>
+</div>
+<aside class="notes"><h4>Notes</h4><ol>
+<li>Perovskite rounds: <code>second_field_pv/RESULT-SECOND-FIELD-perovskite-2026-10-21.md</code> · answer key = Perovskite Database (CC BY 4.0).</li>
+<li>Sensors: <code>s1_sensor/RESULT-S1-2026-10-21.md</code> · <code>s2_sensor/RESULT-S2-2026-10-21.md</code> (● 158 · ✕ 6 · ○ 6 of 170 · traps 18/18 for both judges).</li>
+<li>Tool for new fields: <code>field_pack/</code> (stops without an answer-key rule document · fewer than 60 papers = test round).</li>
+</ol></aside>
+</section>
+
 <section class="chapter" id="ch9">
 <div class="opener">
 <figure>
@@ -965,7 +998,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>Figure 9-1 · A map is useful at two moments: when it shows a “gap” no one has measured yet, and when, after a human expert's check, it becomes trustworthy.</figcaption>
 </figure>
-<div class="kicker">Chapter 10</div>
+<div class="kicker">Chapter 11</div>
 <h2>What we still don't know · what we will fill in when data arrive</h2>
 <p class="hook">This map is not yet “verified,” because both judges are AI. And there are questions closed as “undetermined.” They are not failures but places to fill when data arrive.</p>
 </div>
@@ -1055,7 +1088,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>The methods learned in four research notes led to this map, and I hope the same methods will one day spread to other maps.</figcaption>
 </figure>
-<div class="kicker">Chapter 11</div>
+<div class="kicker">Chapter 12</div>
 <h2>Where this map came from, and where it is going</h2>
 <p class="hook">The verification method of this map did not appear out of nowhere. It stands on four research notes I wrote earlier. And this map is not the end, either.</p>
 </div>

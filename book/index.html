@@ -191,8 +191,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
       <li><span class="n">7</span><a href="#ch7">10월 9일 — 지도가 넓어지고, 지도를 시험하다</a></li>
       <li><span class="n">8</span><a href="#ch8">규칙을 고칠 때, 논문을 고를 때 — 우리가 지킨 약속</a></li>
       <li><span class="n">9</span><a href="#ch8b">숫자에서 만든 법으로 — 10월 16~19일</a></li>
-      <li><span class="n">10</span><a href="#ch9">아직 모르는 것 · 자료가 오면 채울 것</a></li>
-      <li><span class="n">11</span><a href="#ch10">이 지도는 어디서 왔고, 어디로 가나</a></li>
+      <li><span class="n">10</span><a href="#ch8c">다른 분야로 옮겨 심고, 첫 응용 칸 — 10월 20~21일</a></li>
+      <li><span class="n">11</span><a href="#ch9">아직 모르는 것 · 자료가 오면 채울 것</a></li>
+      <li><span class="n">12</span><a href="#ch10">이 지도는 어디서 왔고, 어디로 가나</a></li>
     </ol>
   </nav>
 </section>
@@ -971,6 +972,39 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </section>
 
 
+<section class="chapter" id="ch8c">
+  <div class="opener">
+    <div class="kicker">10장</div>
+    <h2>다른 분야로 옮겨 심고, 첫 응용 칸 — 10월 20~21일</h2>
+    <p class="hook">MXene 에서 다듬은 방법이 MXene 밖에서도 서는지 보려고 페로브스카이트 태양전지로 옮겨 심었다. 사람이 만든 정답표가 있는 분야라 점수를 바로 잴 수 있었다. 그리고 MXene 지도에는 처음으로 «쓰임» 칸, 센서가 생겼다.</p>
+  </div>
+  <div class="prose">
+    <h3>페로브스카이트 — 일곱 회차, 그리고 «30편은 흔들린다»</h3>
+    <p>공개 정답표(Perovskite Database · 사람이 논문에서 손으로 옮긴 표 · CC BY 4.0)와 우리 추출을 견주었다. 회차마다 새 논문 30편을 뽑았다. 지시서를 고친 회차에서 «만든 법» 점수가 83.4%·87.4% 로 문턱(80%)을 넘었는데, 지시서를 <b>한 글자도 안 바꾸고</b> 새 30편으로 다시 재면 79.1%·71.8% 로 떨어졌다.</p>
+    <p>지시서 한 줄이 좋아서 오른 것인지, 그 30편이 쉬워서 오른 것인지 이 크기로는 가를 수 없었다. 회차 넷을 합치면 처음 규칙 81.2%, 고친 규칙 79.3% — 고친 효과가 보이지 않는다. 그래서 «통과»라고 적지 않고 회차를 닫았다.</p>
+    <blockquote class="pull span">30편짜리 회차 하나는 15%p 쯤 흔들린다. 그 안에서 오르내린 점수로 «고쳐서 나아졌다»고 말할 수 없다.</blockquote>
+    <p>대신 배운 것을 다음 분야를 여는 도구 자체에 넣었다. 그 분야의 정답표가 «무엇을 어떻게 적었는지» 적은 규칙 문서가 없으면 회차가 시작되지 않고, 논문이 60편보다 적으면 «시험 회차»로만 돈다. 사람이 기억해서 지키는 약속이 아니라 도구가 멈추는 자리다.</p>
+    <h3>센서 — 지도의 첫 응용 칸</h3>
+    <p>성질(전도도·용량 같은 물질 자체의 값)이 아니라 «무엇에 쓰나»의 값을 처음 모았다. 먼저 30편 시험 회차: 76줄 가운데 두 AI 채점자가 함께 원문과 맞다고 본 것이 97.4%. 틀린 두 줄은 정의의 경계에서 나왔다 — 형광으로 잰 검출 한계를 «전기화학» 칸에 넣었고, 회복 시간을 응답 시간으로 적었다. 그래서 본회차 전에 정의 두 개를 더했다(응답 시간 = 오르는 시간만 · 빛으로 잰 검출 한계는 따로).</p>
+    <p>본회차 60편: 48편에서 175줄. 함정 문제를 두 채점자 모두 18개 다 맞혔고, 실제 줄은 <b>92.9%</b> 가 두 채점자 지지, 틀림 3.5% 로 통과했다. 지도에는 여섯 칸(압력 감도 · 게이지 인자 · 응답 시간 · 가스 응답 · 가스 검출 한계 · 전기화학 검출 한계) <b>214점 · 62편</b>이 실렸다. 논문마다 ppm·ppb, μM·nM, s·ms 가 섞여 있어 지도에서는 한 단위로 맞추고, 원문의 값과 단위는 옆에 그대로 둔다.</p>
+    <h3>공개 전에 잡은 우리 실수 — 그리고 공개 뒤에 잡은 것</h3>
+    <p>단위를 맞추는 코드에서 두 가지가 틀렸다. 원문의 «−»(유니코드 마이너스)를 못 읽어 음수 8줄이 양수로 들어갔고, «10⁻¹⁴ M»을 «10 M»으로 읽었다(코드를 셸로 넣다가 글자 하나가 다른 글자로 바뀐, 우리 규칙에 이미 적혀 있던 함정이다). 둘 다 값의 범위를 훑어보다 공개 전에 잡았다.</p>
+    <p>같은 날 밤, 3D 탐험 지도에 «비교 목록»을 만들어 시험하다 하나를 더 찾았다. 예전 회차에서 실은 전기 전도도 7개가 «4.77×10⁻⁵»의 «×10⁻⁵»를 잃고 4.77 로 실려 있었다(이미 공개된 값이다). 지도를 만드는 단계에서 고쳤고, 지도 «🕒 걸어온 길»에 그날 줄로 적었다.</p>
+    <blockquote class="pull span">값이 원문 문장과 맞는지는 채점자 둘이 본다. 그 값을 화면의 숫자로 옮기는 것은 우리 코드이고, 그것은 채점자가 보지 않는다. 그래서 공개 전에 값의 범위를 한 번 더 훑는다.</blockquote>
+    <h3>다음 — 담수화, 그리고 MOF·COF</h3>
+    <ul>
+      <li><b>담수화</b> — 무료 본문 MXene 담수화 논문 57편 가운데 아직 지도에 없는 34편을 전부 한 회차로 돌리고 있다(CDI · 태양열 증발 · 분리막). 작아서 «담수화 전체»가 아니라 «이 34편에서»로만 말한다.</li>
+      <li><b>MXene + MOF·COF 복합체</b> — 그다음. 그 뒤 MOF·COF 자체 지도는 그 분야 전문가의 확인을 받으며 연다.</li>
+    </ul>
+  </div>
+  <aside class="notes"><h4>주석</h4><ol>
+    <li>페로브스카이트 회차: <code>second_field_pv/RESULT-SECOND-FIELD-perovskite-2026-10-21.md</code> · 정답표 = Perovskite Database(CC BY 4.0).</li>
+    <li>센서: <code>s1_sensor/RESULT-S1-2026-10-21.md</code> · <code>s2_sensor/RESULT-S2-2026-10-21.md</code>(● 158 · ✕ 6 · ○ 6 / 170 · 함정 18/18 두 채점자).</li>
+    <li>새 분야 도구: <code>field_pack/</code>(정답 기록 규칙 문서 없으면 멈춤 · 60편 미만 = 시험 회차).</li>
+  </ol></aside>
+</section>
+
+
 <section class="chapter" id="ch9">
   <div class="opener">
     <figure>
@@ -995,7 +1029,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
       </svg>
       <figcaption>그림 9-1 · 지도가 쓸모 있는 순간은 두 가지다. 아직 아무도 재지 않은 «빈칸»을 보여 줄 때, 그리고 사람 전문가의 확인을 거쳐 믿을 수 있게 될 때.</figcaption>
     </figure>
-    <div class="kicker">10장</div>
+    <div class="kicker">11장</div>
     <h2>아직 모르는 것 · 자료가 오면 채울 것</h2>
     <p class="hook">이 지도는 아직 «검증됨»이 아니다. 채점자 둘이 모두 AI 이기 때문이다. 그리고 «판정 불가»로 닫힌 질문들이 있다. 실패가 아니라, 자료가 오면 채울 자리다.</p>
   </div>
@@ -1088,7 +1122,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
       </svg>
       <figcaption>네 편의 연구 노트에서 배운 방법이 이 지도로 이어졌고, 같은 방법이 언젠가 다른 지도들로 퍼져 나가기를 바란다.</figcaption>
     </figure>
-    <div class="kicker">11장</div>
+    <div class="kicker">12장</div>
     <h2>이 지도는 어디서 왔고, 어디로 가나</h2>
     <p class="hook">이 지도의 검증 방법은 갑자기 생긴 것이 아니다. 내가 먼저 쓴 네 편의 연구 노트 위에 서 있다. 그리고 이 지도가 끝도 아니다.</p>
   </div>
