@@ -241,6 +241,18 @@ function askP(q){const o=document.getElementById('askout');let u=null;for(const 
   `<ul style="margin:6px 0">`+T.slice(0,5).map(d=>`<li><a href="#" data-a="${D.indexOf(d)}">${esc(VU(d))}</a> — ${esc(d.l)}</li>`).join('')+`</ul><div class=dim>Measurement conditions differ, so do not compare numbers directly · click a line for the source · the threshold has been put in «Find by target value» below</div>`;
  o.querySelectorAll('a[data-a]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(D[+a.dataset.a]);document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'nearest'})}));
  document.getElementById('ftgt').value=+thr.toPrecision(3);find()}
+function INV(P){
+ const base=pick(),R=new Set(P),Q=base.filter(d=>!R.has(d));if(!Q.length)return '';
+ const F=[['Etchant',d=>GN[d.e]||d.e||'(not stated)'],['Delamination',d=>(DLN[d.dl]||d.dl||'(not stated)').replace(/^Delam\.: /,'')],['Form',d=>(FMN[d.fm]||d.fm||'(not stated)').replace(/^Form: /,'')]];
+ const pc=(L,f)=>{const m={};L.forEach(d=>{const k=f(d);(m[k]=m[k]||new Set()).add(d.p)});return m};
+ const nA=new Set(P.map(d=>d.p)).size,nB=new Set(Q.map(d=>d.p)).size,pct=(a,n)=>n>=10?` (${Math.round(100*a/n)}%)`:'';
+ let h=`<div class=v3card style="margin-top:14px;padding:12px 14px"><b>How the samples that reached it were made — next to the rest</b><div class=dim>Within the same tab and unit, the methods of values that reached the target (${nA} papers) and those that did not (${nB} papers) are counted <b>by paper</b> · one paper can be on both sides · no % below 10 papers · <b>appearing together does not mean the method caused it</b> (measurement conditions, thickness and loading differ)</div>`;
+ F.forEach(([nm,f])=>{const a=pc(P,f),b=pc(Q,f);const ks=Object.keys(a).sort((x,y)=>a[y].size-a[x].size).slice(0,5);
+  h+=`<div style="margin-top:8px"><b>${esc(nm)}</b><table style="font-size:13px"><tr><th>Method</th><th>Papers that reached</th><th>Other papers</th></tr>`+ks.map(k=>`<tr><td>${esc(k)}</td><td>${a[k].size}/${nA}${pct(a[k].size,nA)}</td><td>${b[k]?b[k].size:0}/${nB}${pct(b[k]?b[k].size:0,nB)}</td></tr>`).join('')+'</table></div>'});
+ const KL={precursor:'Precursor',etch:'Etching',delam:'Delamination',processing:'Processing / post-treatment'};
+ const own=P.filter(d=>d.hw&&!d.hx&&d.hw.st&&d.hw.st.length).slice(0,5);
+ h+=`<div style="margin-top:10px"><b>Top ${own.length} values that reached it — how that sample was made</b><div class=dim>Recipes of «another sample in the same paper» are left out · only steps both checkers found in the source · click a line for the source sentence</div>`+(own.length?own.map(d=>`<div style="margin:6px 0;padding:6px 10px;border-left:3px solid var(--accent)"><a href="#" data-f="${D.indexOf(d)}"><b>${esc(VU(d))}</b></a> — ${esc(d.l)}<ul style="margin:2px 0 0;padding-left:18px">`+d.hw.st.map(s=>`<li><span class=dim>${esc(KL[s.k]||s.k)}</span> ${esc(s.t)}</li>`).join('')+'</ul></div>').join(''):'<div class=dim>None of the values that reached it has a recipe for its own sample.</div>')+'</div></div>';
+ return h}
 function find(){const lo=LOW(S.u);document.getElementById('fdir').textContent=lo?'at most (lower is better)':'at least';document.getElementById('funit').textContent=uname(S.u);
 const raw=document.getElementById('ftgt').value,o=document.getElementById('fout');if(raw===''){o.innerHTML='<span class=dim>Enter a target value and press “Find” to list the samples that reached it, grouped by etchant.</span>';return}
 const tg=+raw,P=pick().filter(d=>lo?d.v<=tg:d.v>=tg).sort((a,b)=>lo?a.v-b.v:b.v-a.v);
@@ -248,7 +260,7 @@ if(!P.length){o.innerHTML=`<span class=dim>In this tab/unit, ${esc(raw)} ${esc(S
 const by={};P.forEach(d=>(by[d.e]=by[d.e]||[]).push(d));
 o.innerHTML=`<div>${P.length} values · ${new Set(P.map(d=>d.p)).size} papers reached it</div>`+G.filter(g=>by[g]).sort((a,b)=>new Set(by[b].map(d=>d.p)).size-new Set(by[a].map(d=>d.p)).size).map(g=>{const L=by[g];const ets=[...new Set(L.map(d=>d.et).filter(Boolean))].slice(0,4).join(' · ');
 return `<div style="margin-top:10px"><b>${esc(GN[g])}</b> — values ${L.length} · papers ${new Set(L.map(d=>d.p)).size} <span class=dim>${esc(ets)}</span><ul style="margin:4px 0">`+L.slice(0,6).map((d,i)=>`<li><a href="#" data-f="${D.indexOf(d)}">${esc(VU(d))}</a> — ${esc(d.l)} <span class=dim>${esc(d.lv||'')}</span></li>`).join('')+(L.length>6?`<li class=dim>… ${L.length-6} more in the plot/table above</li>`:'')+'</ul></div>'}).join('');
-o.querySelectorAll('a[data-f]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(D[+a.dataset.f]);document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'nearest'})}))}
+o.innerHTML+=INV(P);o.querySelectorAll('a[data-f]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();show(D[+a.dataset.f]);document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'nearest'})}))}
 function spread(){const box=document.getElementById('sprtab');if(!box)return;const med=a=>{const s=a.slice().sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
  const P=pick().filter(d=>!d.s.startsWith('judged_error')),G2={};
  P.forEach(d=>{const k=[d.m,d.e,d.dl||'',d.fm||''].join('|');((G2[k]=G2[k]||{})[d.p]=G2[k][d.p]||[]).push(d)});
@@ -593,6 +605,8 @@ if(typeof draw==='function'){const _d=draw;draw=function(){_d.apply(this,argumen
 .howhl{outline:3px solid #f5b14c!important;outline-offset:3px;border-radius:8px;transition:outline-color .3s}
 #howcap{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:65;background:#1a1300;color:#ffe2b0;border:1px solid #f5b14c;border-radius:12px;padding:10px 16px;font-size:14.5px;max-width:min(560px,calc(100vw - 32px));box-shadow:0 8px 24px rgba(0,0,0,.35);display:none}
 #howcap.on{display:block}
+.howdemo{display:block;margin:0 0 10px;font:inherit;font-size:13.5px;border-radius:999px;padding:6px 14px;cursor:pointer;border:1px solid #f5b14c;background:rgba(245,177,76,.12);color:#f5b14c}
+.howdemo:hover{background:rgba(245,177,76,.22)}
 @media (max-width:760px){#howbtn{bottom:auto;top:12px;left:auto;right:12px;padding:6px 11px;font-size:12.5px}#howbox{padding:18px 16px}}
 </style>
 <script>
@@ -611,7 +625,7 @@ bg.innerHTML=`<div id="howbox"><h2>${T('처음 쓰는 법 — 질문 하나, 클
 <li>${T('<b>값 누르기</b> — 나온 목록에서 값을 누르면 바로 밑에 원문 문장이 펼쳐진다','<b>Click a value</b> — the source sentence opens right below it')}<small>${T('노란 칠 = 원문에서 그 숫자 · 논문 링크로 원본 확인','highlight = that number in the source · open the paper link to check')}</small></li>
 <li>${T('<b>🧪 만든 법 열기</b> — 원료 → 식각 → 박리 → 가공을 원문 근거와 함께 본다','<b>Open 🧪 how it was made</b> — precursor → etching → delamination → processing, each with its source quote')}<small>${T('두 AI 판정자가 원문과 맞다고 본 칸만 보인다','only steps both AI judges found in the source are shown')}</small></li>
 </ol>
-<div class="ex">${T('▶ «보여 줘」를 누르면 화면이 위 세 단계를 직접 따라 해 보여요(약 10초).','▶ Press «Show me» and the page walks through the three steps by itself (about 10 s).')}</div>
+<div class="ex">${T('▶ «보여 줘」를 누르면 화면이 위 세 단계를 직접 따라 해 보여요(약 10초). 다른 기능(목표값으로 찾기 · 같은 방법 다른 값)도 칸 맨 위 노란 «▶ 보여 주기」를 누르면 같은 식으로 보여 줘요.','▶ Press «Show me» and the page walks through the three steps by itself (about 10 s). Other tools (find by target value · same recipe, different values) have a yellow «▶ Show me» at the top of their panel that does the same.')}</div>
 <div class="row"><button type="button" data-h="close">${T('닫기','Close')}</button><button type="button" class="go" data-h="demo">${T('▶ 보여 줘','▶ Show me')}</button></div>
 <p class="warn2">${T('값은 AI 판정자 둘이 원문과 대조한 것이며 사람 확인 전이에요(«검증됨」 아님). 측정 조건이 달라 값끼리 바로 견주지 마세요. 이 안내는 맨 위 «❓ 처음 쓰는 법」(아래로 내려가면 왼쪽 아래)으로 다시 열 수 있어요.','Values were checked against the source by two AI judges and are not yet human-verified. Conditions differ, so do not compare values directly. Reopen this guide from «❓ How to start» at the top (bottom left once you scroll down).')}</p></div>`;
 document.body.append(btn,bg);
@@ -649,6 +663,41 @@ async function demo(){if(running)return;running=true;try{
  else{say(T('③ 이 값에는 아직 «만든 법」이 없어요 — 있는 값에는 원문 밑에 🧪 단추가 보입니다','③ This value has no «how it was made» yet — values that have one show a 🧪 button under the source'));hl(pn);await wait(3600)}
  say(T('이제 직접 해 보세요 — 다른 예시나 궁금한 질문을 적어 보면 돼요','Now try your own — another example or your own question'));await wait(3200);
 }catch(e){console.error('howto demo',e)}finally{hl(null);cap.classList.remove('on');running=false}}
+
+const tab=(card,t)=>{const b=document.querySelector(`${card} .v3tabs button[data-t="${t}"]`);if(b)b.click()};
+const typeIn=async(el,s)=>{el.value='';for(const ch of String(s)){el.value+=ch;await wait(110)}};
+async function demoTgt(){if(running)return;running=true;try{
+ tab('#v3find','tgt');
+ const sel=document.getElementById('v3prop');
+ if(sel&&[...sel.options].some(o=>o.value==='F/g')&&sel.value!=='F/g'){say(T('① 성질 고르기 — 위 «성질 둘러보기」에서 «F/g(정전용량)」을 고릅니다','① Pick a property — «F/g (capacitance)» in «Explore a property» above'));hl(sel);await wait(2200);sel.value='F/g';sel.dispatchEvent(new Event('change'))}
+ else{say(T('① 성질 고르기 — 위 «성질 둘러보기」에서 고른 성질을 그대로 씁니다','① Pick a property — the one chosen in «Explore a property» above'));hl(sel);await wait(2200)}
+ const vs=(typeof pick==='function'?pick():[]).map(d=>d.v).filter(v=>isFinite(v)).sort((a,b)=>a-b);
+ if(vs.length<8){say(T('이 성질은 값이 적어 예시를 보여 주기 어려워요 — 다른 성질을 골라 보세요','Too few values for this property to show an example — pick another property'));await wait(3000);return}
+ const lo=typeof LOW==='function'&&LOW(S.u),q=vs[Math.floor(vs.length*(lo?.25:.75))],tg=+q.toPrecision(2);
+ const inp=document.getElementById('ftgt');
+ say(T(`② 목표값 넣기 — 예: ${tg} (지금 보이는 값 중 위쪽 4분의 1이 시작되는 값). 원하는 값을 직접 넣어도 됩니다`,`② Enter a target — e.g. ${tg} (where the top quarter of the values shown begins). Any value of your own works too`));hl(inp);await wait(1200);await typeIn(inp,tg);await wait(1400);
+ const go=document.getElementById('fgo');say(T('③ «찾기」를 누릅니다','③ Press «Find»'));hl(go);await wait(1800);go.click();await wait(900);
+ const out=document.getElementById('fout');const first=out&&out.querySelector('div');
+ say(T('④ 목표에 닿은 값이 식각 약품별로 묶여 나옵니다 — 값을 누르면 원문 문장','④ Values that reach the target appear grouped by etchant — click a value for its source sentence'));hl(first||out);await wait(3200);
+ const cmp=out&&[...out.querySelectorAll('.v3card')].pop();
+ if(cmp){say(T('⑤ 닿은 쪽과 나머지의 만든 법을 논문 수로 나란히 — 어떤 방법이 더 자주 보이는지(원인이라는 뜻은 아님)','⑤ How the samples that reached it were made, next to the rest, counted by paper — which methods appear more often (not proof of cause)'));hl(cmp.querySelector('table')||cmp);await wait(4200);
+  const rec=cmp.querySelector('a[data-f]');const blk=rec&&rec.closest('div');
+  if(blk){say(T('⑥ 위쪽 값마다 «그 시료」의 만든 법 — 원료 → 식각 → 층 분리 → 가공','⑥ For the top values, how that very sample was made — precursor → etching → delamination → processing'));hl(blk);await wait(3800)}}
+ say(T('이제 직접 해 보세요 — 성질과 목표값을 바꿔 «찾기」','Now try your own — change the property and target, then «Find»'));hl(inp);await wait(3000);
+}catch(e){console.error('howto tgt demo',e)}finally{hl(null);cap.classList.remove('on');running=false}}
+async function demoCmp(){if(running)return;running=true;try{
+ tab('#v3exp','cmp');await wait(400);
+ const row=document.querySelector('#sprtab tr[data-sp]');
+ if(!row){say(T('이 성질에는 같은 방법으로 만든 논문 2편 이상 묶음이 없어요 — 위에서 다른 성질을 골라 보세요','No recipe group with 2+ papers for this property — pick another property above'));await wait(3200);return}
+ say(T('① 표 한 줄 = 같은 조성·식각·층 분리·형태로 만든 시료 묶음 · «차이(배)」 = 가장 높은 논문 ÷ 가장 낮은 논문','① One row = samples made the same way (composition, etching, delamination, form) · «ratio» = highest paper ÷ lowest paper'));hl(document.getElementById('sprtab'));await wait(3800);
+ say(T('② 줄을 누릅니다','② Click a row'));hl(row);await wait(2000);row.click();await wait(900);
+ const pr=document.getElementById('sprpair');say(T('③ 가장 높은 논문과 가장 낮은 논문의 원문이 나란히 — 같은 방법인데 왜 다른지(두께·조건) 원문에서 찾아봅니다','③ The highest and lowest papers side by side — look in the source for why the same recipe differs (thickness, conditions)'));hl(pr);await wait(4400);
+ say(T('이제 직접 — 다른 줄을 눌러 보세요','Now try another row yourself'));await wait(2600);
+}catch(e){console.error('howto cmp demo',e)}finally{hl(null);cap.classList.remove('on');running=false}}
+const demoBtn=(paneId,fn,label)=>{const p=document.getElementById(paneId);if(!p)return;const b=mk('button',{type:'button',className:'howdemo'},label);b.addEventListener('click',fn);p.prepend(b)};
+demoBtn('v3ask',demo,T('▶ 보여 주기 — 예시 질문 하나를 따라 해 봅니다(약 10초)','▶ Show me — walk through one example question (about 10 s)'));
+demoBtn('v3tgt',demoTgt,T('▶ 보여 주기 — 성질 고르기 → 목표값 넣기 → 찾기 → 결과 읽는 법(약 20초)','▶ Show me — pick a property → enter a target → Find → how to read the result (about 20 s)'));
+demoBtn('v3cmp',demoCmp,T('▶ 보여 주기 — 같은 방법인데 값이 다른 논문 둘을 나란히(약 15초)','▶ Show me — two papers with the same recipe but different values, side by side (about 15 s)'));
 if(!seen())setTimeout(open,1200);
 }catch(e){console.error('howto layer',e)}})();
 </script>
