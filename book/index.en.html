@@ -191,8 +191,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li><span class="n">8</span><a href="#ch8">When we changed the rules, when we chose the papers — the promises we kept</a></li>
 <li><span class="n">9</span><a href="#ch8b">From numbers to recipes — 16–19 October</a></li>
 <li><span class="n">10</span><a href="#ch8c">Transplanting the method, and a first application property — 20–21 October</a></li>
-<li><span class="n">11</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
-<li><span class="n">12</span><a href="#ch10">Where this map came from, and where it is going</a></li>
+<li><span class="n">11</span><a href="#ch8d">Into neighbouring families — the MOF and COF islands, and what the engine learned from a failure — 22–24 October</a></li>
+<li><span class="n">12</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
+<li><span class="n">13</span><a href="#ch10">Where this map came from, and where it is going</a></li>
 </ol>
 </nav>
 </section>
@@ -973,6 +974,64 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li>Tool for new fields: <code>field_pack/</code> (stops without an answer-key rule document · fewer than 60 papers = test round).</li>
 </ol></aside>
 </section>
+<section class="chapter" id="ch8d">
+<div class="opener">
+<div class="kicker">Chapter 11</div>
+<h2>Into neighbouring families — the MOF and COF islands, and what the engine learned from a failure — 22–24 October</h2>
+<p class="hook">Two islands appeared next to the MXene map: metal–organic frameworks (MOF) and covalent organic frameworks (COF). This was the first test of whether the same method stands in another family of materials. One round failed, and that failure led to two upgrades of the judging engine.</p>
+</div>
+<div class="prose">
+<h3>Two things finished first — desalination and composites</h3>
+<p>We finished the two rounds named at the end of chapter 10. All 34 desalination papers ran as one round, and both judges supported 96.9%. The 34 papers on MXene mixed with MOFs or COFs passed at 95.3%, adding 61 values. These composite values became the bridge to the new islands.</p>
+<h3>The MOF island — same name, a hundredfold apart</h3>
+<p>We collected MOF BET surface areas in four rounds. All four passed (91–99%), giving 856 passed rows. But for the same MOF name, values differed tens to hundreds of times between papers.</p>
+<p>When we looked again at the name groups, a large part turned out to be <b>«different materials sharing a name»</b>. MIL-53 split into an aluminium form and an iron form (×244 → ×4.7 and ×7.5), and MOF-74 is a different material for each metal. ZIF-8 had another crystal phase, ZIF-L, mixed in (×152 → ×43). The spread that remains comes from samples and conditions, such as samples soaked in buffer or different synthesis times.</p>
+<blockquote class="pull span">A number can match its source sentence while the name still points to a different material. Name groups need checking too.</blockquote>
+<h3>Publishing without waiting for the experts</h3>
+<p>We asked experts in the field two questions, and the answers have not come yet: whether a «surface area» with no model name counts as BET, and where to place a framework that links metal units by imine bonds. We published the islands anyway. The defaults we chose are written on the page, and the values are marked «passed AI judging · not yet expert-checked · may change». When answers arrive we will change them and record the date and the reason. On the first-screen 3D view they are galaxies far from MXene.</p>
+<h3>The second MOF property — CO₂ uptake failed once</h3>
+<p>The CO₂ uptake round (770 rows) <b>failed</b>, with 53% supported and 45% wrong. The cause was one line of the judging instructions, not the values. The line said «isosteric heat, selectivity → null (recorded but not mapped)». One judge read it as «not put in the map column»; the other read it as «the property field must be empty». As a result, 283 correctly recorded rows were all marked wrong.</p>
+<p>Both judges scored almost perfectly on the planted traps. Traps test «is the value and sample right», not «did both judges read the instructions the same way». So a perfect trap score could not, in principle, catch this flaw.</p>
+<p>We added one clarifying paragraph to that line and re-ran only the judging, registered before seeing the results. It passed with 89.5% supported and 8.6% wrong, and judge disagreement fell from 45% to 6.4%. We recorded it as «passed after fixing one line of the instructions». The island now shows 370 CO₂ uptake values from 65 papers, grouped by condition.</p>
+<p>Taken alone, the «CO₂ uptake» rows were 12.5% wrong, and the page says so. When we counted those 61 rows, 39 were not static isotherm values (thermogravimetry, flowing gas, time-dependent) and 16 were per volume. This was a gap in the extraction definition, and one of the two judges caught it.</p>
+<blockquote class="pull span">When the two judges split widely, suspect the instructions, not the values.</blockquote>
+<h3>What the engine learned — two upgrades</h3>
+<p><b>First (the same evening).</b> We added three things.</p>
+<ul>
+<li>The word «null» now says in plain words what it empties.</li>
+<li>When the judges split on more than 20% of rows, scoring raises «instruction wording suspect». Tested on past judgement files, it rang on the failed round (42.9%) and stayed quiet on normal rounds.</li>
+<li>A new trap, «next column»: a value swapped for the number in the neighbouring column of the same table row.</li>
+</ul>
+<p>The second COF round was the first to run on this engine, and it passed (96.7%). Both judges caught both next-column traps.</p>
+<p><b>Second (that night).</b> In the 20 rows sampled after the second COF round passed, 3 were values given only as «surface area», with no «BET» in the sentence. Our default does not count these as BET, but that rule was not in the instructions; it was only being caught in the sample check.</p>
+<p>So we put the rule into the definitions. In the next round's extraction, 13 rows were set apart as «surface area, model not stated». The same upgrade fixed four more things:</p>
+<ul>
+<li>two measurements at different temperatures were being merged as duplicates</li>
+<li>a trap was picking a «±» error value</li>
+<li>units were compared only by their first two characters</li>
+<li>control approvals and judging batches now carry fingerprints, so scoring stops if they change midway</li>
+</ul>
+<h3>Links inside the galaxies</h3>
+<p>At first most stars (papers) on the islands floated alone, and COF had no name groups at all. The MXene map looks connected because it has a linking rule: same material, same property column. We built such rules for the neighbouring families.</p>
+<ul>
+<li>COF name groups are set by the two molecules a framework is made from (TpPa-1 · TpBD · TAPB-DMTP …), and cousins built from the same molecule are linked.</li>
+<li>For MOFs, we normalised name spellings (six kinds of hyphen, letter case) and re-matched the groups. We also linked «cousins with different metals» that share a linker (BDC · BTC …).</li>
+</ul>
+<p>The rule was «better unlinked than wrongly linked». While testing, we caught and fixed a mistake that treated pyridyl porphyrin as the same molecule as carboxyphenyl porphyrin. Lone stars fell from 130 to 74 for COF and from 136 to 102 for MOF. The rest cannot be linked from the name alone; the next rounds need a «made from» extraction field.</p>
+<h3>Running now</h3>
+<ul>
+<li><b>Third COF round</b> — 120 papers, widened to include papers without «BET» in the abstract. It is the first real run of the second upgrade.</li>
+<li><b>MOF «same-sample» pairs</b> — in the 65 CO₂ papers, extract the BET of the same samples to make «surface area ↔ CO₂» pairs, instead of comparing values from different papers. The pairing rule (same DOI and the sample name identical to the letter) was fixed before seeing results.</li>
+<li>Human expert checks are still zero, so we do not use the word «verified».</li>
+</ul>
+</div>
+<aside class="notes"><h4>Notes</h4><ol>
+<li>MOF BET: <code>m1_mof_bet</code> – <code>m4_mof_bet</code> · name groups revisited = <code>m1_mof_bet/RESULT-name-groups-v2-2026-10-23.md</code>.</li>
+<li>CO₂: <code>m5_mof_co2/RESULT-m5-2026-10-23.md</code> (failed) · <code>m5b_mof_co2/RESULT-m5b-2026-10-23.md</code> · the 61 wrong rows = <code>m5b_mof_co2/WHY-uptake-wrong-61.md</code>.</li>
+<li>COF: <code>c1_cof_bet</code> · <code>c2_cof_bet/RESULT-c2-2026-10-23.md</code> · engine cards = <code>CARD-c2_cof_bet.md</code> (first) · <code>CARD-c3_cof_bet.md</code> (second · tests T1–T6).</li>
+<li>Links: <code>cof_names.py</code> · <code>mof_links.py</code> (hand tests 21 · 25).</li>
+</ol></aside>
+</section>
 
 <section class="chapter" id="ch9">
 <div class="opener">
@@ -998,7 +1057,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>Figure 9-1 · A map is useful at two moments: when it shows a “gap” no one has measured yet, and when, after a human expert's check, it becomes trustworthy.</figcaption>
 </figure>
-<div class="kicker">Chapter 11</div>
+<div class="kicker">Chapter 12</div>
 <h2>What we still don't know · what we will fill in when data arrive</h2>
 <p class="hook">This map is not yet “verified,” because both judges are AI. And there are questions closed as “undetermined.” They are not failures but places to fill when data arrive.</p>
 </div>
@@ -1088,7 +1147,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>The methods learned in four research notes led to this map, and I hope the same methods will one day spread to other maps.</figcaption>
 </figure>
-<div class="kicker">Chapter 12</div>
+<div class="kicker">Chapter 13</div>
 <h2>Where this map came from, and where it is going</h2>
 <p class="hook">The verification method of this map did not appear out of nowhere. It stands on four research notes I wrote earlier. And this map is not the end, either.</p>
 </div>
