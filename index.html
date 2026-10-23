@@ -43,10 +43,14 @@ a{color:var(--accent)}details{margin-top:16px}footer{margin-top:30px;color:var(-
 details.how{margin:12px 0}details.how>summary{list-style:none;cursor:pointer;display:block;background:#fff1e4;border:2px solid #e85d04;border-radius:10px;padding:11px 16px;font-weight:700;font-size:15.5px;color:#16213e;line-height:1.45}details.how>summary::-webkit-details-marker{display:none}details.how>summary:hover{background:#ffe2c8}details.how>summary::after{content:"  ▼ 눌러서 펼치기";color:#e85d04;white-space:nowrap}html[lang=en] details.how>summary::after{content:"  ▼ click to open"}details.how[open]>summary::after{content:"  ▲ 접기"}html[lang=en] details.how[open]>summary::after{content:"  ▲ close"}details.how[open]>summary{margin-bottom:8px}
 </style></head><body><section id="hero">
 <div class="hcap"><h2>MXene Atlas</h2><div class="hsub">A map of MXene properties — every value linked to its source sentence. Click a dot to see it.</div></div>
-<a class="hmap" href="#map">View the map ↓</a>
+<a class="hmap" href="#map">View the map ↓</a><a class="hmap" href="#galaxy" style="top:72px;border-color:#ffb86b">🪐 A growing map — MOF·COF ↓</a>
 <div id="htour" aria-live="polite"></div><div id="hq"></div>
 <a id="hisle" href="explore.html" title="Explore mode — periodic-table island in 3D"><iframe src="explore.html?hero=1" title="MXene periodic-table island in 3D" loading="lazy" tabindex="-1" aria-hidden="true"></iframe><span>🏝 Explore mode — periodic-table island ↗</span></a>
-</section><div class="page" id="map"><div class="wrap">
+</section>
+
+<section id="galaxy" style="background:#0a0a12;padding:6px 0 10px"><div style="max-width:1100px;margin:0 auto"><iframe id="gxf" src="galaxy.html" title="A growing map — MXene and neighbouring material families" loading="lazy" style="width:100%;height:640px;border:0;display:block"></iframe></div></section>
+<script>addEventListener('message',e=>{if(e.data&&e.data.gxh){const f=document.getElementById('gxf');if(f)f.style.height=(e.data.gxh+4)+'px'}})</script>
+<div class="page" id="map"><div class="wrap">
 <div id="newbox" class="card" style="display:none;margin:8px 0 12px;border-left:3px solid #f43f5e;clear:both"></div>
 <div style="float:right;text-align:right"><div class="toplinks"><a href="explore.html" class="lang">🧭 Explore mode (3D)</a><a href="islands.html" class="lang">🪐 MOF·COF islands</a><a href="book/index.en.html" class="lang">📖 Book</a><a href="ko.html" class="lang">한국어</a></div><div class="credit">© 2026 Tae-Eun Song · Map screens, code and text: all rights reserved · No copying, redistribution or reuse of the source without permission · Values table (CSV download): CC BY 4.0 · Source sentences: each paper’s own licence<br>this work started from <a href="https://songt-50.github.io/mxene-3d/">the MXene 3D explainer</a></div></div>
 <h1><span class="atlas" id="atlasT" title="click to see everything built so far">MXene Atlas</span> — an evidence-linked map of MXene properties<span class="ver">v2</span></h1><div id="tl" class="card"><b>What has been built so far</b> <span class="dim">— each round: what it measured and how it ended · «undecidable» is not failure but «to be filled when data arrives»</span><div id="tlbody"></div></div>

@@ -1,0 +1,61 @@
+<!doctype html><html lang="ko"><head>
+<meta name="robots" content="noindex, nofollow"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MXene Atlas — galaxy</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a12;--bg-card:#141424;--fg:#e8e8f0;--fg-dim:#9a9ab0;--border:#2a2a40;--mx:#7cc4ff;--mof:#ffb86b;--cof:#c79bff;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',sans-serif}
+.w{padding:12px 14px}h3{margin:0 0 4px;font-size:18px}.lead{margin:0 0 8px;color:var(--fg-dim);font-size:13px;line-height:1.55}
+.g{display:grid;grid-template-columns:1fr 260px;gap:10px}@media(max-width:760px){.g{grid-template-columns:1fr}}
+.st{background:radial-gradient(ellipse at 42% 50%,#14143a 0%,#0a0a12 72%);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+svg{display:block;width:100%;height:auto}
+.pn{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13.5px;line-height:1.6}
+.pn a{color:var(--mx)}.tl{color:var(--fg-dim);font-size:12px;margin-top:8px}
+.pl{cursor:pointer}.pl:hover .core,.pl:focus .core{stroke:#fff;stroke-width:2.5}.pl:focus{outline:none}
+.lb{font-weight:700;fill:var(--fg);pointer-events:none}.sb{font-size:11px;fill:var(--fg-dim);pointer-events:none}
+.bn{font-size:11px;fill:#d8d8e8;font-family:var(--mono);paint-order:stroke;stroke:#0a0a12;stroke-width:4px;pointer-events:none}
+</style></head><body><div class="w">
+<h3>넓어지는 지도 — MXene 에서 이웃 물질 가족으로</h3><p class="lead">행성 하나 = 물질 가족 하나 · 크기 = 원문 문장이 달린 값 수 · 선 = 두 가족을 잇는 값(복합체 · 같은 성질) · 많이 이어질수록 가깝게. 흐린 점선은 <b>다음 후보</b>(아직 값 없음).</p>
+<div class="g"><div class="st"><svg id="sv" viewBox="0 0 660 460" role="img" aria-label="넓어지는 지도 — MXene 에서 이웃 물질 가족으로"></svg></div>
+<div class="pn"><div id="pn">행성을 눌러 보세요</div><div class="tl">10/11 MXene 공개 → 10/23 MOF·COF 첫 판 → 다음 행성은 사전등록한 회차 하나를 통과하면 생긴다</div></div></div></div>
+<script>
+const G={"mx": {"n": 4461, "p": 862}, "mof": {"rows": 817, "papers": 305, "pure": 510}, "cof": {"rows": 176, "papers": 67, "pure": 145}, "br": {"mxmof": [93, 34], "mxcof": [23, 4], "bet": [555, 817], "hyb": 1}},T={"lang": "ko", "map": "index.html", "isl": "islands.ko.html", "h": "넓어지는 지도 — MXene 에서 이웃 물질 가족으로", "lead": "행성 하나 = 물질 가족 하나 · 크기 = 원문 문장이 달린 값 수 · 선 = 두 가족을 잇는 값(복합체 · 같은 성질) · 많이 이어질수록 가깝게. 흐린 점선은 \u003cb>다음 후보\u003c/b>(아직 값 없음).", "mx": "MXene", "mxs": "지도 본체 · {n}값 · {p}편", "mof": "MOF", "cof": "COF", "ms": "첫 판 · BET {n}값 · {p}편", "b1": "MXene+MOF 복합체 {n}값", "b2": "MXene+COF 복합체 {n}값", "b3": "같은 성질 BET", "b4": "MOF/COF 혼성 {n}편", "cand": [["TMD", "MoS₂ 같은 전이금속 칼코겐화물"], ["그래핀", "그래핀·산화그래핀"], ["h-BN", "질화붕소 시트"], ["페로브스카이트", "방법 옮겨 심기 시험만 · 지도엔 없음"]], "cn": "다음 후보 · 값 없음", "tl": "10/11 MXene 공개 → 10/23 MOF·COF 첫 판 → 다음 행성은 사전등록한 회차 하나를 통과하면 생긴다", "pmx": "\u003cb>MXene\u003c/b> — 이 지도의 중심. 주기율표(금속 × C/N × 층수)로 본다. \u003ca href='#' data-go='map'>지도로 ↓\u003c/a>", "pmof": "\u003cb>MOF\u003c/b>(금속-유기 골격) — BET 비표면적 첫 판. AI 판정 통과 · 전공자 확인 전. \u003ca href='#' data-go='MOF'>MOF 섬 열기 →\u003c/a>", "pcof": "\u003cb>COF\u003c/b>(공유결합 유기 골격) — BET 비표면적 첫 판. AI 판정 통과 · 전공자 확인 전. \u003ca href='#' data-go='COF'>COF 섬 열기 →\u003c/a>", "pc": "\u003cb>{a}\u003c/b> — {b}. 아직 이 지도에 값이 없다. 회차 하나를 미리 적은 규칙대로 돌려 통과하면 행성이 된다.", "hint": "행성을 눌러 보세요"},NS='http://www.w3.org/2000/svg',sv=document.getElementById('sv'),pn=document.getElementById('pn');
+const f=n=>n.toLocaleString(T.lang==='ko'?'ko-KR':'en-US'),fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]);
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);(p||sv).appendChild(e);return e}
+function go(k){if(k==='map'){try{window.top.location.hash='map'}catch(e){}return}window.top.location.href=T.isl+'#'+k}
+pn.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a){e.preventDefault();go(a.dataset.go)}});
+const C=[270,235],R=n=>Math.min(100,Math.max(16,Math.sqrt(n)*1.35));  // Codex 10/23: 값이 늘어도 화면 밖으로 안 나가게 상한
+const rm=R(G.mx.n),rf=R(G.mof.rows),rc=R(G.cof.rows);
+// 거리 = 다리 수로 자동(DESIGN §6): 많이 이어질수록 가깝다 · 방향만 정해 둔다(MOF 오른쪽 위 · COF 오른쪽 아래)
+const gap=n=>220/(1+Math.log10(1+n))+60;
+const lm=G.br.mxmof[0]+G.br.bet[1],lc=G.br.mxcof[0]+G.br.hyb*10;
+const at=(ang,d)=>[C[0]+Math.cos(ang)*d,C[1]+Math.sin(ang)*d];
+const pm=at(-0.55,rm+rf+gap(lm)),pc=at(0.62,rm+rc+gap(lc));
+// 다음 후보 — 바깥 궤도(흐린 점선 · 숫자 없음)
+const ox=rm+170,oy=rm+110,orb=el('g',{});el('ellipse',{cx:C[0],cy:C[1],rx:ox,ry:oy,fill:'none',stroke:'#2a2a48','stroke-dasharray':'2 7'},orb);
+T.cand.forEach((c,i)=>{const a=Math.PI*(0.62+i*0.25),x=C[0]+Math.cos(a)*ox,y=C[1]+Math.sin(a)*oy;
+ const g=el('g',{class:'pl',tabindex:0,role:'button'},orb);el('circle',{cx:x,cy:y,r:15,fill:'#11111e',stroke:'#55557a','stroke-dasharray':'3 3',class:'core'},g);
+ const t=el('text',{x,y:y+30,'text-anchor':'middle',class:'sb'},g);t.textContent=c[0];
+ const h=()=>{pn.innerHTML=fill(T.pc,{a:c[0],b:c[1]})+'<div class="tl">'+T.cn+'</div>'};g.addEventListener('click',h);g.addEventListener('keydown',e=>{if(e.key==='Enter')h()})});
+// 선: 두 원의 가장자리끼리 · 글자는 선의 t 지점에서 수직으로 off 만큼
+function line(A,ra,B,rb,w,col,dash,label,t,off,sh){const dx=B[0]-A[0],dy=B[1]-A[1],d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d,nx=-uy,ny=ux,s=sh||0;
+ const a=[A[0]+ux*ra+nx*s,A[1]+uy*ra+ny*s],b=[B[0]-ux*rb+nx*s,B[1]-uy*rb+ny*s];
+ el('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:col,'stroke-width':w,'stroke-opacity':.8,'stroke-dasharray':dash||'','stroke-linecap':'round'});
+ const x=a[0]+(b[0]-a[0])*t+nx*off,y=a[1]+(b[1]-a[1])*t+ny*off;const e=el('text',{x,y:y+4,'text-anchor':'middle',class:'bn'});e.textContent=label}
+const lw=n=>Math.min(9,1.2+Math.log10(1+n)*2.2);
+line(C,rm,pm,rf,lw(G.br.mxmof[0]),'#ffb86b','',fill(T.b1,{n:f(G.br.mxmof[0])}),.5,-14,-9);
+line(C,rm,pm,rf,1.6,'#9aa0b8','6 5',T.b3,.5,16,9);
+line(C,rm,pc,rc,lw(G.br.mxcof[0]),'#c79bff','',fill(T.b2,{n:f(G.br.mxcof[0])}),.45,-18,0);
+if(G.br.hyb)line(pm,rf,pc,rc,1.2,'#d9c08a','2 4',fill(T.b4,{n:G.br.hyb}),.5,-16,0);
+function planet(xy,r,col,name,sub,info,inside){const g=el('g',{class:'pl',tabindex:0,role:'button'});
+ el('circle',{cx:xy[0],cy:xy[1],r:r+10,fill:col,'fill-opacity':.08},g);el('circle',{cx:xy[0],cy:xy[1],r,fill:col,'fill-opacity':.28,stroke:col,'stroke-width':1.5,class:'core'},g);
+ const t=el('text',{x:xy[0],y:xy[1]+(inside?-2:5),'text-anchor':'middle',class:'lb','font-size':r>60?24:15},g);t.textContent=name;
+ const s=el('text',{x:xy[0],y:inside===1?xy[1]+20:inside===2?xy[1]-r-16:xy[1]+r+18,'text-anchor':'middle',class:'sb'},g);s.textContent=sub;
+ const h=()=>{pn.innerHTML=info};g.addEventListener('click',h);g.addEventListener('keydown',e=>{if(e.key==='Enter')h()})}
+planet(C,rm,'#7cc4ff',T.mx,fill(T.mxs,{n:f(G.mx.n),p:f(G.mx.p)}),T.pmx,1);
+planet(pm,rf,'#ffb86b',T.mof,fill(T.ms,{n:f(G.mof.rows),p:f(G.mof.papers)}),T.pmof,2);
+planet(pc,rc,'#c79bff',T.cof,fill(T.ms,{n:f(G.cof.rows),p:f(G.cof.papers)}),T.pcof);
+const ph=()=>{try{parent.postMessage({gxh:document.querySelector('.w').offsetHeight},'*')}catch(e){}};addEventListener('load',ph);addEventListener('resize',ph);ph();
+try{new ResizeObserver(ph).observe(document.querySelector('.w'))}catch(e){}  // Codex 10/23: 설명 칸이 길어지면 높이 다시 알림
+</script><script data-goatcounter="https://mxene-atlas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body></html>
