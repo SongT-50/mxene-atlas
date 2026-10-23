@@ -1335,7 +1335,7 @@ const PK=PROPS.map(p=>p.k), PNAME={}; PROPS.forEach(p=>PNAME[p.k]=p.n);
 const ETN={"HF":"HF","HF+HCl":"HF+HCl","salt":"fluoride salt + acid","LiF/HCl":"LiF/HCl","molten_salt":"molten salt","other":"other","unknown":"unknown (not in source)"};
 const METALS={Sc:[0,0],Ti:[1,0],V:[2,0],Cr:[3,0],Y:[0,1],Zr:[1,1],Nb:[2,1],Mo:[3,1],Hf:[1,2],Ta:[2,2],W:[3,2]};
 const MCOL={Sc:0x8a8fa3,Ti:0x5aa9ff,V:0xb07cff,Cr:0x4fd1a5,Y:0x8a8fa3,Zr:0x9aa0b5,Nb:0xffb454,Mo:0xff6b8a,Hf:0x9aa0b5,Ta:0xffd84d,W:0x8fe36b,MIX:0xe6e6f0,UNK:0x707080};
-const TILES=Object.assign({},METALS,{MIX:[4.35,0.5],UNK:[4.35,1.6]});
+const TILES=Object.assign({},METALS,{MIX:[1.0,-1.2],UNK:[2.0,-1.2]}); /* 10/23 혼합·미상은 뒤쪽 — 오른쪽은 MOF 섬이 이어질 자리 */
 const TLABEL={MIX:"Mixed",UNK:"? Unknown"};
 const SP=2.7, TS=2.35;
 
@@ -1595,7 +1595,7 @@ renderer.setClearColor(0x000000,0);
 view.appendChild(renderer.domElement);
 const scene=new THREE.Scene();
 const cam=new THREE.PerspectiveCamera(42,1,0.1,200);
-const cx=(4.35*SP)/2, cz=(1.6*SP)/2;
+const cx=(3*SP)/2, cz=(0.8*SP)/2;
 const ctl=new THREE.OrbitControls(cam,renderer.domElement);
 const HERO=new URLSearchParams(location.search).has("hero"); if(HERO)document.body.classList.add("hero");
 ctl.target.set(cx,0.6,cz); ctl.enableDamping=true; ctl.dampingFactor=0.08; ctl.maxPolarAngle=1.38; ctl.minDistance=4; ctl.maxDistance=40;
@@ -1608,8 +1608,8 @@ const sea=new THREE.Mesh(new THREE.CircleGeometry(30,64),new THREE.MeshLambertMa
 sea.rotation.x=-Math.PI/2; sea.position.set(cx,-0.32,cz); scene.add(sea);
 const island=new THREE.Mesh(new THREE.BoxGeometry(4*SP+0.6,0.3,3*SP+0.6),new THREE.MeshLambertMaterial({color:0x3a3324}));
 island.position.set(1.5*SP,-0.17,1*SP); scene.add(island);
-const isle2=new THREE.Mesh(new THREE.BoxGeometry(SP*0.95,0.3,SP*2.15),new THREE.MeshLambertMaterial({color:0x2e2a22}));
-isle2.position.set(4.35*SP,-0.17,1.05*SP); scene.add(isle2);
+const isle2=new THREE.Mesh(new THREE.BoxGeometry(SP*2.05,0.3,SP*0.95),new THREE.MeshLambertMaterial({color:0x2e2a22}));
+isle2.position.set(1.5*SP,-0.17,-1.2*SP); scene.add(isle2);
 
 function labelSprite(txt,sub,color){
   const cv=document.createElement("canvas");cv.width=256;cv.height=128;const g=cv.getContext("2d");
@@ -1900,36 +1900,42 @@ function openAtom(c){
 if(typeof HERO!=='undefined'&&HERO)return;if(!window.MOFX||!MOFX.length||typeof THREE==='undefined')return;
 const KO=document.documentElement.lang!=='en',L=(k,e)=>KO?k:e;
 const MAP=KO?'index.html':'index.en.html',ISL=KO?'islands.html':'islands.en.html';
-/* 주기율표 자리: MXene 섬 gx = 족-3 · gz = 주기-4 (Sc 0,0 … W 3,2) · 오른쪽 «혼합·미상」 작은 섬(gx 4.35) 뒤로 7~12족을 이어 놓는다 */
-const OFF=2.2,MT={Mn:[7-3+OFF,0],Fe:[8-3+OFF,0],Co:[9-3+OFF,0],Ni:[10-3+OFF,0],Cu:[11-3+OFF,0],Zn:[12-3+OFF,0],Al:[13-3+OFF,-1],Mg:[2-3,-1],Ce:[1,3.25],
- Ti:[1,0],Zr:[1,1],Cr:[3,0],Hf:[1,2],
- MIXM:[13-3+OFF,0.55],UNKM:[13-3+OFF,1.65]};
+/* 10/23 «혼합·미상은 뒤에 · Cr 와 Mn 은 가깝게(붙이지는 말고) · MXene 과 MOF 는 구별되게 · Zr MOF 도 좋은 방법」
+   자리(월드 좌표 = 칸 수 × SP): 7~12족은 Cr(3) 오른쪽 한 칸 띄워 4.6 부터 · 3주기(Mg·Al)는 앞줄(gz -1) · MOF 의 혼합·미상·Ce 는 MOF 섬 뒤쪽 줄
+   겹치는 금속(Ti·Zr·Hf = 4족 · Cr = 6족)은 MXene 칸 안이 아니라 그 족의 «MOF 별채»(MXene 섬 앞줄 · 족 세로줄 그대로 · 다른 땅) */
+const S0=TS,AN=.82,MT={Mn:[4.6*SP,0,S0],Fe:[5.6*SP,0,S0],Co:[6.6*SP,0,S0],Ni:[7.6*SP,0,S0],Cu:[8.6*SP,0,S0],Zn:[9.6*SP,0,S0],
+ Al:[10.6*SP,-SP,S0],Mg:[-SP,-SP,S0],MIXM:[6.1*SP,-1.2*SP,S0],UNKM:[7.1*SP,-1.2*SP,S0],Ce:[8.1*SP,-1.2*SP,S0],
+ Ti:[SP-.9,3.1*SP,AN],Zr:[SP,3.1*SP,AN],Hf:[SP+.9,3.1*SP,AN],Cr:[3*SP,3.1*SP,1.4]};
 const MTL={MIXM:L('여러 금속','mixed metals'),UNKM:L('금속 모름','metal ?')};
-const MC=0xffb86b;
+const MC=0xffb86b,LAND=0x1f2d3a;
 const tileOf=r=>{const m=r.mt||'?';if(m.indexOf('/')>=0)return'MIXM';return MT[m]?m:'UNKM'};
 /* MOF 값 → 조성(이름 묶음) 단위 · MXene 조성과 같은 모양({name,tile,ok,byU,all}) */
 const mcomps={};MOFX.forEach(d=>{const t=tileOf(d);const nm=(d.f||L('그 밖 ','other ')+(d.mt&&d.mt!=='?'?d.mt:'')+'-MOF').trim()+' ·MOF';
  const key=nm+'|'+t;/* Codex 10/23: 같은 이름 · 다른 금속은 따로 */const c=mcomps[key]||(mcomps[key]={key,name:nm,tile:t,M:[],ok:[],bad:0,byU:{},all:0,mof:1});c.ok.push(d);c.byU[d.u]=(c.byU[d.u]||0)+1;c.all++});
 const mlist=Object.values(mcomps).sort((a,b)=>b.all-a.all),byTile={};mlist.forEach(c=>(byTile[c.tile]=byTile[c.tile]||[]).push(c));
-/* 섬·칸·탑 */
+/* 땅: MOF 는 MXene(갈색)과 다른 푸른 회색 땅 · 주황 테두리 */
 const grp=new THREE.Group();scene.add(grp);
-const ext=new THREE.Mesh(new THREE.BoxGeometry(6*SP+0.6,0.3,SP+0.6),new THREE.MeshLambertMaterial({color:0x33281e}));ext.position.set((7-3+OFF+2.5)*SP,-0.17,0);grp.add(ext);
-const side=new THREE.Mesh(new THREE.BoxGeometry(SP+0.6,0.3,2.9*SP),new THREE.MeshLambertMaterial({color:0x2c241b}));side.position.set((13-3+OFF)*SP,-0.17,0.35*SP);grp.add(side);
+const land=(x,z,w,d)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,.3,d),new THREE.MeshLambertMaterial({color:LAND}));m.position.set(x,-.17,z);grp.add(m);
+ const e=new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry),new THREE.LineBasicMaterial({color:MC,transparent:true,opacity:.55}));e.position.copy(m.position);grp.add(e)};
+land(7.1*SP,0,5*SP+S0+.6,S0+.6);land(7.1*SP,-1.2*SP,2*SP+S0+.6,S0+.6);
+const used=t=>!!byTile[t];
+if(used('Al'))land(10.6*SP,-SP,S0+.5,S0+.5);if(used('Mg'))land(-SP,-SP,S0+.5,S0+.5);
+if(used('Ti')||used('Zr')||used('Hf'))land(SP,3.1*SP,3*AN+.55,AN+.75);if(used('Cr'))land(3*SP,3.1*SP,1.4+.5,1.4+.5);
 const hexG=new THREE.CylinderGeometry(.5,.5,1,6);hexG.translate(0,.5,0);
-const newTiles=Object.keys(MT).filter(t=>!METALS[t]);
-newTiles.forEach(t=>{if(!byTile[t])return;const[gx,gz]=MT[t],x=gx*SP,z=gz*SP;
- if(t==='Mg'||t==='Ce'){const p=new THREE.Mesh(new THREE.BoxGeometry(SP*.95,.3,SP*.95),new THREE.MeshLambertMaterial({color:0x2c241b}));p.position.set(x,-.17,z);grp.add(p)}
- const m=new THREE.Mesh(new THREE.BoxGeometry(TS,.18,TS),new THREE.MeshLambertMaterial({color:new THREE.Color(MC).multiplyScalar(.22)}));m.position.set(x,0,z);grp.add(m);
+Object.keys(MT).forEach(t=>{if(!byTile[t])return;const[x,z,s]=MT[t];
+ const m=new THREE.Mesh(new THREE.BoxGeometry(s,.18,s),new THREE.MeshLambertMaterial({color:new THREE.Color(MC).multiplyScalar(.22)}));m.position.set(x,0,z);grp.add(m);
  const e=new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry),new THREE.LineBasicMaterial({color:MC}));e.position.copy(m.position);grp.add(e);
- const n=byTile[t].reduce((s,c)=>s+c.all,0);const sp=labelSprite(MTL[t]||t,'MOF '+n,'#ffb86b');sp.position.set(x,.42,z+TS/2-.05);grp.add(sp)});
+ const n=byTile[t].reduce((a,c)=>a+c.all,0),sp=labelSprite(MTL[t]||t,'MOF '+n,'#ffb86b');if(s<S0)sp.scale.multiplyScalar(.62);sp.position.set(x,.42,z+s/2-.05);grp.add(sp)});
+/* 큰 이름표: 어느 땅이 어느 가족인지(둘 다 · MOF 모드에서만) */
+const big=(txt,col,x,z)=>{const s=labelSprite(txt,'',col);s.scale.multiplyScalar(2.1);s.position.set(x,2.9,z);grp.add(s)};
+big('MXene','#7cc4ff',1.5*SP,-2.3*SP);big('MOF','#ffb86b',7.1*SP,-2.3*SP);
 const mtow=[];
-Object.keys(byTile).forEach(t=>{const list=byTile[t],[gx,gz]=MT[t],x0=gx*SP,z0=gz*SP,shared=!!METALS[t];
- /* 겹치는 칸(Ti·Zr·Cr·Hf)은 MXene 탑이 앞쪽을 쓰므로 MOF 탑은 칸 뒤쪽 한 줄에 */
- /* Codex 10/23: 겹치는 칸도 하나도 빼지 않는다 — 칸 뒤쪽에 한 줄 6개씩 */
- const k=shared?Math.min(6,list.length):Math.max(1,Math.ceil(Math.sqrt(list.length))),area=1.45,cell=area/k;
+Object.keys(byTile).forEach(t=>{const list=byTile[t],[x0,z0,s]=MT[t];
+ /* Codex 10/23: 칸 하나에 탑을 하나도 빼지 않는다 */
+ const k=Math.max(1,Math.ceil(Math.sqrt(list.length))),area=s*.66,cell=area/k;
  list.forEach((c,i)=>{const r=Math.floor(i/k),q=i%k,col=new THREE.Color(MC);if(i>0)col.offsetHSL(0,-.12,(i%3-1)*.07);
   const mesh=new THREE.Mesh(hexG,new THREE.MeshLambertMaterial({color:col,emissive:0x000000}));
-  const w=cell*.62;mesh.position.set(x0-area/2+cell*(q+.5),.09,shared?z0-TS/2+.18+r*.3:z0-area/2+cell*(r+.5)-.12);
+  const w=cell*.62;mesh.position.set(x0-area/2+cell*(q+.5),.09,z0-area/2+cell*(r+.5)-.06*s);
   mesh.scale.set(w,.01,w);mesh.userData={kind:'tower',comp:c,h:0,base:col.clone(),mof:1};scene.add(mesh);pickables.push(mesh);towers[c.key]=mesh;mtow.push(mesh)})});
 /* 가족 스위치 */
 let FAM='mx';
@@ -1941,9 +1947,9 @@ function setFam(f){FAM=f;sw.querySelectorAll('button').forEach(b=>b.classList.to
  if(f!=='mx'&&cur!=='ALL'&&cur!=='BET m²/g'&&typeof setProp==='function')setProp('BET m²/g');else{layoutTowers();layoutFog()}
  note.style.display=f==='mx'?'none':'block';
  note.innerHTML=f==='mof'?L(`🆕 <b>MOF</b> — 같은 주기율표의 금속 노드 칸 위 <b>육각 탑</b> = MOF 이름 묶음(ZIF-8 · UiO-66 …) · 높이 = 모은 BET 값 개수 · 성질은 아직 BET 하나(첫 판 · AI 판정 통과 · 전공자 확인 전) · 값 표 = <a href="${ISL}#MOF">MOF 섬 페이지</a>`,`🆕 <b>MOF</b> — hexagonal towers on the metal-node cells of the same periodic table = MOF name groups (ZIF-8, UiO-66 …) · height = number of BET values · one property so far (first version · passed AI judging · not yet expert-checked) · table: <a href="${ISL}#MOF">MOF island page</a>`)
-  :L(`<b>둘 다</b> — 네모 탑 = MXene 조성 · 육각 탑 = MOF · <b>Ti · Zr · Cr 칸</b>에서는 두 가족이 같은 금속 칸에 나란히 선다(예: Ti 칸 = Ti₃C₂ 와 MIL-125)`,`<b>Both</b> — square towers = MXene compositions · hexagonal towers = MOFs · on the <b>Ti · Zr · Cr</b> cells both families stand on the same metal (e.g. Ti: Ti₃C₂ and MIL-125)`);
+  :L(`<b>둘 다</b> — 네모 탑 = MXene 조성 · 육각 탑 = MOF · 두 가족이 같이 쓰는 금속(Ti · Zr · Hf · Cr)은 MXene 섬 <b>앞줄(화면 아래)의 «MOF 별채»</b>에 — 주기율표 세로줄은 같고 땅은 다르다(예: Ti = MXene 칸의 Ti₃C₂ · 별채의 MIL-125)`,`<b>Both</b> — square towers = MXene compositions · hexagonal towers = MOFs · metals both families use (Ti · Zr · Hf · Cr) get a <b>MOF annex</b> in front of the MXene island, in the same column of the periodic table (e.g. Ti: Ti₃C₂ on the MXene cell, MIL-125 on the annex)`);
  /* 카메라: MOF 는 넓힌 쪽을, 둘 다는 전체를 */
- const tx=f==='mx'?cx:f==='mof'?(7-3+OFF+3)*SP:(13-3+OFF)*SP/2,far=f==='mx'?1:1.55;ctl.target.set(tx,.6,cz);cam.position.set(tx,9.5*far,cz+12.5*far);
+ const tx=f==='mx'?cx:f==='mof'?7.1*SP:4.8*SP,tz=f==='mof'?.2*SP:cz,far=f==='mx'?1:f==='mof'?1.3:1.75;ctl.target.set(tx,.6,tz);cam.position.set(tx,9.5*far,tz+12.5*far);
  try{localStorage.setItem('mxene-explore-fam',f)}catch(e){}}
 const sw=document.createElement('span');sw.id='famsw';sw.innerHTML=[['mx','MXene'],['mof','MOF 🆕'],['both',L('둘 다','both')]].map(([f,t])=>`<button type="button" data-f="${f}">${t}</button>`).join('');
 sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFam(b.dataset.f)});
