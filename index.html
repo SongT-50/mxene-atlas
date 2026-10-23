@@ -1025,5 +1025,21 @@ if(pn&&window.MutationObserver)new MutationObserver(()=>{if(pn.querySelector('.a
 if(location.hash==='#ask')open_('','');
 }catch(e){console.error('ask layer',e)}})();
 </script>
+
+<style>
+#askband{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding:9px 14px;border:1px solid var(--border,#2a2a3a);border-left:3px solid #f5a623;border-radius:8px;font-size:14px;color:var(--fg,#e8e8f0);background:rgba(245,166,35,.06)}
+#askband a{color:#f5a623;font-weight:600;text-decoration:none}
+#askband a:hover{text-decoration:underline}
+#askband .dim{color:var(--fg-dim,#9aa0b8);font-size:13px}
+</style>
+<script>
+(function(){
+ const EN=document.documentElement.lang==='en',T=(k,e)=>EN?e:k;
+ const w=document.querySelector('#map .wrap');if(!w||document.getElementById('askband'))return;
+ const d=document.createElement('div');d.id='askband';
+ d.innerHTML=`<span>🧪 ${T('전공자 의견이 도움이 되는 정의 질문이 있어요','A few definition questions where expert judgement would help')}</span><span class="dim">${T('10개 · 하나만 답해도 돼요 · 로그인 없음','10 questions · answering one is enough · no login')}</span><a href="questions.html">${T('질문 보기 →','See the questions →')}</a>`;
+ w.prepend(d);
+})();
+</script>
 <script data-goatcounter="https://mxene-atlas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body></html>
