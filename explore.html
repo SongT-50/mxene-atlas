@@ -133,9 +133,13 @@ body.hero{background:transparent;overflow:hidden}
 mark.hn{background:#ffe066;color:#111;padding:0 2px;border-radius:3px;font-weight:700}.val .fbx{margin-top:3px;font-size:11.5px}.val .fbx a{color:var(--accent,#8fa8ff)}.val .fbx .fbn{opacity:.7}
 </style>
 <style>
-#famsw{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
-#famsw button{font:inherit;font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid #3a4066;background:transparent;color:inherit;cursor:pointer}
+#famsw{display:inline-flex;align-items:center;gap:6px;margin-left:10px;vertical-align:middle;padding:3px 6px 3px 10px;border:1.5px solid #ffb86b;border-radius:999px;background:rgba(255,184,107,.08)}
+#famsw .fl{font-size:12px;color:#ffb86b;font-weight:700;white-space:nowrap}
+#famsw button{font:inherit;font-size:15px;padding:5px 14px;border-radius:999px;border:1px solid #3a4066;background:transparent;color:inherit;cursor:pointer}
 #famsw button.on{background:#ffb86b;color:#1a1208;border-color:#ffb86b;font-weight:700}
+#famsw.new button[data-f=mof]{animation:fampulse 1.6s ease-in-out infinite}
+@keyframes fampulse{0%,100%{box-shadow:0 0 0 0 rgba(255,184,107,.7)}50%{box-shadow:0 0 0 7px rgba(255,184,107,0)}}
+@media (prefers-reduced-motion:reduce){#famsw.new button[data-f=mof]{animation:none;outline:2px solid #ffb86b}}
 #famnote{display:none;margin:6px 16px 0;padding:7px 12px;border-left:3px solid #ffb86b;background:rgba(255,184,107,.08);font-size:13px;border-radius:6px}
 </style></head>
 <body>
@@ -1950,9 +1954,11 @@ function setFam(f){FAM=f;sw.querySelectorAll('button').forEach(b=>b.classList.to
   :L(`<b>둘 다</b> — 네모 탑 = MXene 조성 · 육각 탑 = MOF · 두 가족이 같이 쓰는 금속(Ti · Zr · Hf · Cr)은 MXene 섬 <b>앞줄(화면 아래)의 «MOF 별채»</b>에 — 주기율표 세로줄은 같고 땅은 다르다(예: Ti = MXene 칸의 Ti₃C₂ · 별채의 MIL-125)`,`<b>Both</b> — square towers = MXene compositions · hexagonal towers = MOFs · metals both families use (Ti · Zr · Hf · Cr) get a <b>MOF annex</b> in front of the MXene island, in the same column of the periodic table (e.g. Ti: Ti₃C₂ on the MXene cell, MIL-125 on the annex)`);
  /* 카메라: MOF 는 넓힌 쪽을, 둘 다는 전체를 */
  const tx=f==='mx'?cx:f==='mof'?7.1*SP:4.8*SP,tz=f==='mof'?.2*SP:cz,far=f==='mx'?1:f==='mof'?1.3:1.75;ctl.target.set(tx,.6,tz);cam.position.set(tx,9.5*far,tz+12.5*far);
- try{localStorage.setItem('mxene-explore-fam',f)}catch(e){}}
-const sw=document.createElement('span');sw.id='famsw';sw.innerHTML=[['mx','MXene'],['mof','MOF 🆕'],['both',L('둘 다','both')]].map(([f,t])=>`<button type="button" data-f="${f}">${t}</button>`).join('');
-sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b)setFam(b.dataset.f)});
+ try{localStorage.setItem('mxene-explore-fam2',f)}catch(e){}}
+const sw=document.createElement('span');sw.id='famsw';sw.innerHTML=`<span class="fl">${L('🧭 가족','🧭 Family')}</span>`+[['mx','MXene'],['mof','MOF 🆕'],['both',L('둘 다','both')]].map(([f,t])=>`<button type="button" data-f="${f}">${t}</button>`).join('');
+
+let seen=false;try{seen=localStorage.getItem('mxene-explore-famseen')==='1'}catch(e){}if(!seen)sw.classList.add('new');
+sw.addEventListener('click',e=>{const b=e.target.closest('button');if(b){setFam(b.dataset.f);sw.classList.remove('new');try{localStorage.setItem('mxene-explore-famseen','1')}catch(e){}}});
 const hd=document.querySelector('header h1');if(hd)hd.after(sw);const ch=document.getElementById('chips');if(ch)ch.before(note);
 /* MOF 조성 칸(원문 칸) — MXene 성질 목록 대신 BET 하나 · 큰 값 순 원문 문장 */
 const _show=showComp;showComp=function(c){if(!c||!c.mof)return _show.apply(this,arguments);lastComp=c;panelKind='comp';
@@ -1963,10 +1969,11 @@ const _show=showComp;showComp=function(c){if(!c||!c.mof)return _show.apply(this,
  const mv=d=>`<div class="val"><span class="num">● ${esc(fmt(d.v))} m²/g</span> <span class="meta">BET · ${esc(d.l)}${d.cls&&d.cls!=='pure'?' · '+esc(d.cls):''}</span><q>${exHi(d).h}</q><div class="meta">${d.c?esc(d.c)+' · ':''}<a href="https://doi.org/${esc(d.d)}" target="_blank" rel="noopener">doi:${esc(d.d)}</a></div></div>`;
  h+=`<h3>${L('큰 값 순 (원문 문장)','largest first (source sentence)')}</h3>`+vs.slice(0,6).map(mv).join('');
  openPanel(h,'MOF · '+c.name)};
-let f0='mx';try{f0=localStorage.getItem('mxene-explore-fam')||'mx'}catch(e){}
+
+let f0='both';try{f0=localStorage.getItem('mxene-explore-fam2')||'both'}catch(e){}
 if(new URLSearchParams(location.search).get('fam'))f0=new URLSearchParams(location.search).get('fam');
 window.__mof={n:()=>mtow.length,show:nm=>{const c=mlist.find(x=>x.name.startsWith(nm));if(c)showComp(c);return !!c},fam:setFam};/* 시험용 손잡이 */
-grp.visible=false;setTimeout(()=>setFam(['mx','mof','both'].includes(f0)?f0:'mx'),60);
+grp.visible=false;setTimeout(()=>setFam(['mx','mof','both'].includes(f0)?f0:'both'),60);
 }catch(e){console.error('explore MOF layer',e)}})();
 
 window.MX={ok:true,setProp,showPlanet,openAtom:name=>openAtom(comps[name]),closeAtom,parseMX,
