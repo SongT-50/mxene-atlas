@@ -1043,7 +1043,7 @@ if(location.hash==='#ask')open_('','');
  d.innerHTML=`<span>🧪 ${T('MXene을 다뤄 보셨나요? 쉬운 질문 5개에 답해 주시면 지도가 정확해져요','Have you worked with MXenes? Five easy questions help make this map more accurate')}</span><span class="dim">${T('1분 · 하나만 답해도 돼요 · 로그인 없음','1 minute · one answer is enough · no login')}</span><a class="askbtn" href="questions.html">${T('질문 5개 답하기 →','Answer 5 questions →')}</a>`;
  w.prepend(d);
  const a=document.createElement('div');a.id='accband';
- a.innerHTML=`🔎 ${T('AI 판정은 얼마나 맞나 — 내부 시험 122문항(10/24)','How accurate is the AI check — internal test, 122 items (Oct 24)')}: <b>MXene</b> ${T('맞는 값 인정','correct values accepted')} 98–100% · <b>MOF</b> 98–100% · <b>COF</b> 97–100% · ${T('일부러 틀리게 바꾼 값','deliberately altered values caught')} 48/48<span class="dim"> · ${T('정답 = 원문과 직접 대조한 값 · 전공자 확인 전 · 쉬운 함정 기준이라 더 어려운 시험으로 갱신 예정','answer key = values checked against the source sentence · not yet expert-checked · easy traps only; a harder test will replace it')}</span>`;
+ a.innerHTML=`🔎 ${T('AI 판정은 얼마나 맞나 — 내부 시험(10/24 · 맞는 값 122 + 틀리게 바꾼 값 48)','How accurate is the AI check — internal test (Oct 24 · 122 correct values + 48 altered ones)')}: <b>MXene</b> ${T('맞는 값 인정','correct values accepted')} 98–100% · <b>MOF</b> 98–100% · <b>COF</b> 97–100% · ${T('일부러 틀리게 바꾼 값','deliberately altered values caught')} 48/48<span class="dim"> · ${T('정답 = 원문과 직접 대조한 값 · 전공자 확인 전 · 쉬운 함정 기준이라 더 어려운 시험으로 갱신 예정','answer key = values checked against the source sentence · not yet expert-checked · easy traps only; a harder test will replace it')}</span>`;
  d.after(a);
 })();
 </script>
