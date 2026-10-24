@@ -1027,17 +1027,18 @@ if(location.hash==='#ask')open_('','');
 </script>
 
 <style>
-#askband{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding:9px 14px;border:1px solid var(--border,#2a2a3a);border-left:3px solid #f5a623;border-radius:8px;font-size:14px;color:var(--fg,#e8e8f0);background:rgba(245,166,35,.06)}
-#askband a{color:#f5a623;font-weight:600;text-decoration:none}
-#askband a:hover{text-decoration:underline}
+#askband{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0 4px;padding:10px 14px;border:1px solid var(--border,#2a2a3a);border-left:3px solid #f5a623;border-radius:8px;font-size:14px;color:var(--fg,#e8e8f0);background:rgba(245,166,35,.07)}
 #askband .dim{color:var(--fg-dim,#9aa0b8);font-size:13px}
+#askband a.askbtn{margin-left:auto;display:inline-block;padding:7px 16px;border-radius:999px;background:#f5a623;color:#1a1300;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap;box-shadow:0 0 0 0 rgba(245,166,35,.5);transition:transform .15s}
+#askband a.askbtn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+@media (max-width:640px){#askband a.askbtn{margin-left:0}}
 </style>
 <script>
 (function(){
  const EN=document.documentElement.lang==='en',T=(k,e)=>EN?e:k;
  const w=document.querySelector('#map .wrap');if(!w||document.getElementById('askband'))return;
  const d=document.createElement('div');d.id='askband';
- d.innerHTML=`<span>🧪 ${T('전공자 의견이 도움이 되는 정의 질문이 있어요','A few definition questions where expert judgement would help')}</span><span class="dim">${T('10개 · 하나만 답해도 돼요 · 로그인 없음','10 questions · answering one is enough · no login')}</span><a href="questions.html">${T('질문 보기 →','See the questions →')}</a>`;
+ d.innerHTML=`<span>🧪 ${T('MXene을 다뤄 보셨나요? 쉬운 질문 5개에 답해 주시면 지도가 정확해져요','Have you worked with MXenes? Five easy questions help make this map more accurate')}</span><span class="dim">${T('1분 · 하나만 답해도 돼요 · 로그인 없음','1 minute · one answer is enough · no login')}</span><a class="askbtn" href="questions.html">${T('질문 5개 답하기 →','Answer 5 questions →')}</a>`;
  w.prepend(d);
 })();
 </script>
