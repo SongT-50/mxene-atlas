@@ -203,8 +203,9 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li><span class="n">9</span><a href="#ch8b">From numbers to recipes — 16–19 October</a></li>
 <li><span class="n">10</span><a href="#ch8c">Transplanting the method, and a first application property — 20–21 October</a></li>
 <li><span class="n">11</span><a href="#ch8d">Into neighbouring families — the MOF and COF islands, and what the engine learned from a failure — 22–24 October</a></li>
-<li><span class="n">12</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
-<li><span class="n">13</span><a href="#ch10">Where this map came from, and where it is going</a></li>
+<li><span class="n">12</span><a href="#ch8e">A day spent on the engine — fixing only from the inside loses the way — 24 October</a></li>
+<li><span class="n">13</span><a href="#ch9">What we still don't know · what we will fill in when data arrive</a></li>
+<li><span class="n">14</span><a href="#ch10">Where this map came from, and where it is going</a></li>
 </ol>
 </nav>
 </section>
@@ -1046,6 +1047,33 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </ol></aside>
 </section>
 
+<section class="chapter" id="ch8e">
+<div class="opener">
+<div class="kicker">Chapter 12</div>
+<h2>A day spent on the engine — fixing only from the inside loses the way — 24 October</h2>
+<p class="hook">Almost the whole day went into the engine: finding wrong values, fixing, measuring again. Two lessons came out of it. Looking for answers only on the inside loses the direction. And adding a rule for every problem makes rules collide, so things get slower and more wrong, not better.</p>
+</div>
+<div class="prose">
+<h3>1. Fixing only from the inside loses the way — look outside</h3>
+<p>The judges were poor at catching scope errors (full-cell values, compositions outside the card, values of a different material). We added a sentence to the judging instructions telling them to check scope. On our own test it looked better. On items it had never seen, two got worse: the new sentence collided with the MOF rule "record derived materials with a label".</p>
+<p>The answer was outside. Other studies had already reported the same thing: rule files grow by appending rather than editing, contradictions follow, and AI models do not reliably follow "this rule takes priority" wording. So we moved from words to code that labels rows from fields they already carry (device, derived material, composition).</p>
+<p>We also brought in answer keys from outside. Our test answers had only ever been checked by us against the source. With an outside hand-made key for magnetic nanoparticles (ChemX), the key itself mixed in values read from graphs, so it could not serve as a ruler. With an alloy key that records its evidence (LitXAlloy, 19 papers), 66 of our 67 yield-strength values matched — a first sign that the engine holds in a field it had never seen. The outside key even found a hole in our own number checks (a unit-reading bug that wrongly blocked 49 correct values).</p>
+<blockquote class="pull span">A test we wrote ourselves only shows what we fixed. Direction comes from outside research and outside answer keys.</blockquote>
+<h3>2. A new rule for every problem lowers efficiency</h3>
+<p>Several stop-gates appeared in a single day: stop if a common-core rule is missing, stop if a definition changes without a rename map, rules for splitting the test set. Moving to new materials (magnetic, alloys), the MOF-specific trap code no longer fit, and we copied it in just to pass the check — matching on the surface only.</p>
+<p>So we separated two things. <b>Kept firm</b>: quality — no wrong value slips onto the map silently; a new engine version is accepted only if it improves on unseen items in a paired comparison; sealed-test numbers are never hidden. <b>Kept flexible</b>: procedure — a check that does not fit a material can be passed with a written reason. And we stopped appending sentences to the judging instructions; when something needs fixing, we edit the existing sentence.</p>
+<blockquote class="pull span">Rules serve the purpose. Block firmly only what must be blocked; label and record the rest.</blockquote>
+<h3>3. Other lessons</h3>
+<ul>
+<li><b>Do not re-measure on the problems you fixed.</b> The test set is now split into "practice" and "validation". Looking at practice alone, we would have accepted a version that did not help.</li>
+<li><b>Changing a definition quietly ages old answers.</b> Splitting "pore volume" into total and micropore volume turned answers with the old name into wrong answers. A rename map is now written before results are seen.</li>
+<li><b>Errors found must reach the map.</b> Rows our source check marked wrong were used to score the round but stayed on the map — values like 37,500 m²/g. 85 rows were removed.</li>
+<li><b>Open the source.</b> An "impossible" 36,125 mAh/g was a Li–O₂ value normalized per catalyst mass; a single upper limit should not block it.</li>
+<li><b>The engine is a product.</b> It grows on a planned track (specification, version numbers, sealed score sheet, next-version goals) and a field track (problems found while building the map).</li>
+</ul>
+<p class="note">Evidence: test-set results v1.9 · v1.10 · hard set · outside keys X1 (ChemX) and X2 (LitXAlloy) · a review of five outside papers on rule conflicts — kept in our internal records.</p>
+</div>
+</section>
 <section class="chapter" id="ch9">
 <div class="opener">
 <figure>
@@ -1070,7 +1098,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>Figure 9-1 · A map is useful at two moments: when it shows a “gap” no one has measured yet, and when, after a human expert's check, it becomes trustworthy.</figcaption>
 </figure>
-<div class="kicker">Chapter 12</div>
+<div class="kicker">Chapter 13</div>
 <h2>What we still don't know · what we will fill in when data arrive</h2>
 <p class="hook">This map is not yet “verified,” because both judges are AI. And there are questions closed as “undetermined.” They are not failures but places to fill when data arrive.</p>
 </div>
@@ -1160,7 +1188,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </svg>
 <figcaption>The methods learned in four research notes led to this map, and I hope the same methods will one day spread to other maps.</figcaption>
 </figure>
-<div class="kicker">Chapter 13</div>
+<div class="kicker">Chapter 14</div>
 <h2>Where this map came from, and where it is going</h2>
 <p class="hook">The verification method of this map did not appear out of nowhere. It stands on four research notes I wrote earlier. And this map is not the end, either.</p>
 </div>
