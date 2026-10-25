@@ -209,6 +209,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 <li><span class="n">10</span><a href="#ch8c">Transplanting the method, and a first application property — 20–21 October</a></li>
 <li><span class="n">11</span><a href="#ch8d">Into neighbouring families — the MOF and COF islands, and what the engine learned from a failure — 22–24 October</a></li>
 <li><span class="n">13</span><a href="#ch8f">Who is the protagonist? — the TMD island and «roles» — 25 October</a></li>
+<li><span class="n">14</span><a href="#ch8g">What is this sample, really? — the graphene island, electrode supports, and judging without seeing each other — 25 October, afternoon</a></li>
 <li style="list-style:none;margin:14px 0 4px;font-weight:700;color:var(--ink2,#4A5662);font-size:13px;letter-spacing:.02em">Part 4 · People and AI — what grew from working together</li>
 <li style="list-style:none;color:var(--ink3,#7C8792);font-size:13px;margin:2px 0 2px 28px">(being written · around 28 Oct — human judgement · the AI's mistakes and fixes · what grew from the exchange)</li>
 <li style="list-style:none;margin:14px 0 4px;font-weight:700;color:var(--ink2,#4A5662);font-size:13px;letter-spacing:.02em">Part 5 · Where to — what we don't know, and where we are going</li>
@@ -1109,6 +1110,38 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-si
 </ul>
 <blockquote class="pull span">Judge a material by a mixed value, and you praise the wrong one.</blockquote>
 <p class="note">Evidence: T1 MoS₂ HER round · role readings R1, R1b, R1c, R1d (two judges) · direction note (roles and bridges) · outside view (Codex) · ledger of set-aside pieces — in the internal records.</p>
+</div>
+</section>
+<section class="chapter" id="ch8g">
+<div class="opener">
+<div class="kicker">Chapter 14</div>
+<h2>What is this sample, really? — the graphene island, electrode supports, and judging without seeing each other — Oct 25, afternoon</h2>
+<p class="hook">The second island was graphene, an island where one name covers several materials. Identity had to be checked as carefully as the numbers. That afternoon taught two more things. A number measures not only a material but also the place the material sits on. And when two judges can see each other's answers, the fact that they agree becomes hard to trust.</p>
+</div>
+<div class="prose">
+<h3>1. One name, many materials</h3>
+<p>"Graphene" is used for a single carbon sheet, a few-layer flake, reduced graphene oxide (rGO), graphene oxide (GO) and nitrogen-doped graphene. So this island gives every value an «identity» column: what the paper calls the tested sample, checked against the source by two judges. Carbon nanotubes, carbon black, graphene quantum dots and generic carbon shells were written down in advance as not graphene. Before seeing any results we asked Codex for holes in these rules and fixed eleven. One of them was a contradiction: quantum dots were excluded in one line and listed as allowed in another.</p>
+<p>From 223 open papers we drew 80 at random and extracted 403 values. Both judges supported 87.8%, and all 20 rows in the post-pass sample matched the source. The judges filtered out a row that called graphene quantum dots graphene and a row that called «nitrogen-doped carbon» nitrogen-doped graphene. They missed two things: three rows that wrote nitrogen-doped rGO (NrGO) as nitrogen-doped graphene, and one row that gave a value measured after ten thousand cycles as if it belonged to the fresh sample. Both are now examples in the next round's instructions.</p>
+<blockquote class="pull span">The same name does not mean the same material. Match the identity first.</blockquote>
+<h3>2. Two lines I got wrong</h3>
+<p>While reading the controls I marked one paper as having «no graphene at all», yet both judges supported its values. On a second look the paper used a «graphene-based conductive filament»; my search had missed it. I also read «GC» as glassy carbon in a paper that defines it as a «graphene catalyst support». Both rows were among those I had removed from the controls, so the score did not change. Still, the lesson came back: before reporting that the judges were wrong, reopen my own side first.</p>
+<h3>3. Graphene, too, was mostly the helper</h3>
+<p>For 114 composites, two judges separately read what the paper says graphene does. Both judged that the paper stated it in 87% of samples, and they agreed on «protagonist or not» in 97%. Graphene itself was the active site in only 9 composites; in the rest it was a support or a conductive path. That is the same shape as MXene and the opposite of MoS₂. Catalysts made only of graphene-family carbon had a median acid overpotential of 536 mV, weaker even than pure MXene (491) measured with the same definition. The good graphene-composite values were mostly the scores of other catalysts that graphene supports.</p>
+<h3>4. A number measures more than the material — the electrode support</h3>
+<p>A talk on two-dimensional materials we listened to that day made one point: for 2D materials, the substrate a value was measured on is part of the value; change the substrate and the band gap can shift by more than half. The talk was about optical and electronic properties, but hydrogen evolution has the same spot: the electrode the catalyst is loaded on. Nickel foam produces hydrogen by itself.</p>
+<p>Splitting the three islands' values by support showed large differences. 41% of MXene overpotential values were measured on nickel foam, against 6% for MoS₂ and 2% for graphene. A gap in the comparison table that looked like «MXene is better in alkaline» mixed material differences with support differences. The support detector was tested on 12 random papers: 11 right, one caught «Ni Foam» in a reference title. The analysis was written on the card before the results, and the passing criteria were not changed. From the next electrochemical round on, «electrode support» and «state after use» are added to the instructions automatically.</p>
+<blockquote class="pull span">A number does not measure only the material. It also measures where the material sits.</blockquote>
+<h3>5. Judging without seeing each other</h3>
+<p>Tae-Eun Song, who makes this map, asked a question: if the second judge can see the first judge's results, won't their agreement rise by itself? We checked and found one side closed and one side open. One judge cannot open any file at all. The other ran in a temporary folder but could, in principle, read the first judge's results already sitting in the repository, and its log did not record which files it opened. So «it did not look» could not be proven.</p>
+<p>There were signs against copying: only 70% of samples got exactly the same role name, the distributions differed, and agreement was in the same range as earlier rounds. We changed the method anyway. Both judges now start at the same time. Results stay sealed outside the repository until both finish. The full run log is kept, and code checks whether either judge opened the other's results or the repository. We also tested that this check can catch something, starting with whether the log records the file names a judge opens.</p>
+<blockquote class="pull span">Two judges agreeing is evidence only if they could not see each other.</blockquote>
+<h3>6. Other lessons</h3>
+<ul>
+<li><b>Check every place that shows the data.</b> After «I can't see the TMD links» I fixed one screen and replied that the lines were there. The person meant the front page. The same data has to be checked on every screen that draws it.</li>
+<li><b>Adding something new makes old text awkward.</b> Adding an island left seven pieces of text that assumed «MOF and COF only»: buttons, a summary line, the «new» box, audit numbers and the method note. When an island opens, those lines are fixed with it.</li>
+<li><b>Next.</b> The phosphorene (black phosphorus) island: battery capacity on the same definition as the MXene map, with layer number, substrate and mass basis as columns from the start.</li>
+</ul>
+<p class="note">Sources: the G1 graphene HER round (card results and extra analysis) · role reading R1e (two judges) · electrode-support analysis (substrate_split) · sealed judging tools (blind_roles · run_round judge) — in the internal records.</p>
 </div>
 </section>
 <section class="chapter" id="ch9">
