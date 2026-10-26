@@ -501,8 +501,8 @@ top.innerHTML=`<div class="v3facts"><div class="v3fact"><b data-n="${nV}">0</b><
 // ② 탐색기
 exp.innerHTML=`<h2>${T('성질 둘러보기','Explore a property')}</h2><div class="v3row"><select id="v3prop" aria-label="${T('성질','property')}"></select><div id="v3filters" class="v3row" style="margin:0"></div></div>
 <details class="v3adv"><summary>${T('고급 — 식각 양이온 질문 · 거르는 법','Advanced — etchant-cation question · how filters work')}</summary><div id="v3advbody" style="margin-top:8px"></div></details>
-<div class="v3tabs" role="tablist"><button class="on" data-t="str">${T('조성으로 보기','Browse by composition')}</button><button data-t="dist">${T('분포','Distribution')}</button><button data-t="cmp">${T('같은 방법, 다른 값','Same recipe, different values')}</button></div>
-<div class="v3pane on" id="v3str"></div><div class="v3pane" id="v3dist"></div><div class="v3pane" id="v3cmp"></div>`;
+<div class="v3tabs" role="tablist"><button class="on" data-t="dist">${T('분포','Distribution')}</button><button data-t="str">${T('조성으로 보기','Browse by composition')}</button><button data-t="cmp">${T('같은 방법, 다른 값','Same recipe, different values')}</button></div>
+<div class="v3pane" id="v3str"></div><div class="v3pane on" id="v3dist"></div><div class="v3pane" id="v3cmp"></div>`;/* 10/26 저녁 «분포」 탭을 맨 앞·기본으로 */
 
 {const r=mk('div',{id:'v3dl',className:'v3row',style:'margin:6px 0 2px;gap:8px;flex-wrap:wrap;align-items:center'});
  r.innerHTML=`<span class="dim">${T('⬇ 지금 보이는 값 내려받기','⬇ Download the values shown')}</span><button type="button" class="v3dlb" data-dl="csv">CSV</button><button type="button" class="v3dlb" data-dl="bib">${T('논문 BibTeX','papers · BibTeX')}</button><span class="dim" style="font-size:12px">${T('기계 추출 · 사람 확인 전 · 조건이 달라 값끼리 바로 견주지 말 것 · 값 표 = CC BY 4.0(출처: Song, T.-E. MXene Atlas 2026) · 원문 문장 = 각 논문 라이선스','machine-extracted · not human-verified · conditions differ · values table = CC BY 4.0 (credit: Song, T.-E. MXene Atlas 2026) · source sentences = each paper’s licence')}</span>`;
@@ -1281,14 +1281,14 @@ const CFG={
  COF:{name:'COF',col:'#7c4dc4',props:[{k:'bet',name:L('비표면적 BET','BET surface area'),unit:'m²/g'}],
   ident:{t:L('재료 블록','building block'),get:r=>(Array.isArray(r[4])&&r[4].length?r[4]:['?']),nm:v=>v==='?'?L('블록 미기재','block not stated'):v,top:10},conds:[{key:'nm',t:L('이름','name'),get:r=>r[3]||'',nm:v=>v||L('이름 미기재','name not stated'),top:8}],
   note:L('COF 첫 판 — BET(209편) · 재료 블록 칸 = 뼈대를 만든 분자(Tp·TAPB·Pa …) · 한 COF 가 블록 여럿을 쓰면 여러 칸에 같이 든다','COF first version — BET (209 papers) · building block = the molecules that make the framework (Tp · TAPB · Pa …) · a COF made of several blocks appears in each')+AI}};
-const ON=new Set(Object.keys(CFG).filter(f=>(GX.RW[f]||[]).length));window.MATVIEW=ON;
+const ON=new Set(Object.keys(CFG).filter(f=>(GX.RW[f]||[]).length));window.MATVIEW=ON;window.MATCFG=CFG;/* 10/26 저녁 «찾기」 층도 같은 설정을 쓴다 */
 const arr=x=>Array.isArray(x)?x:[x];
 function build(f){const C=CFG[f],RW=GX.RW[f]||[],PS=C.props.filter(p=>RW.some(r=>r[1]===p.k));let S={p:PS[0].k,id:'all',pure:'all',tab:'str'};C.conds.forEach(c=>{S[c.key]='all'});
  const w=document.createElement('div');w.className='mvw';
  w.innerHTML=`<p class="dim" style="margin:0 0 6px">${C.note}</p><div class="mvtop"><span class="mvlab">① ${L('성질 고르기','pick a property')} ▾</span><select class="mvsel">${PS.map(p=>`<option value="${p.k}">${esc(p.name)} (${RW.filter(r=>r[1]===p.k).length})</option>`).join('')}</select></div>
  <div class="bar mvf"></div><div class="bar"><span>⬇ ${L('지금 보이는 값 내려받기','download the values shown')}</span><button class="mvcsv">CSV</button><span>${L('값 표 = CC BY 4.0 · 원문 문장 = 각 논문 라이선스','values CC BY 4.0 · source sentences under each paper\'s licence')}</span></div>
- <div class="v3tabs"><button data-t="str" class="on">${L('구조로 보기','Structure view')}</button><button data-t="dist">${L('분포','Distribution')}</button><button data-t="list">${L('값 목록','Value list')}</button></div>
- <div class="mvpane on" data-p="str"></div><div class="mvpane" data-p="dist"></div><div class="mvpane" data-p="list"></div><div class="mvq dim"></div>`;
+ <div class="v3tabs"><button data-t="dist" class="on">${L('분포','Distribution')}</button><button data-t="str">${L('구조로 보기','Structure view')}</button><button data-t="list">${L('값 목록','Value list')}</button></div>
+ <div class="mvpane" data-p="str"></div><div class="mvpane on" data-p="dist"></div><div class="mvpane" data-p="list"></div><div class="mvq dim"></div>`;
  const $=s=>w.querySelector(s),P=()=>PS.find(p=>p.k===S.p),idk=r=>arr(C.ident.get(r)).map(String);
  const live=c=>!c.only||c.only===S.p;
  const base=()=>RW.filter(r=>r[1]===S.p&&(S.pure==='all'||(S.pure==='pure')===!!r[9])&&C.conds.every(c=>!live(c)||S[c.key]==='all'||String(c.get(r))===S[c.key]));
@@ -1327,6 +1327,47 @@ fb.addEventListener('click',e=>{const bt=e.target.closest('button[data-f]');if(!
 </script>
 
 <style>
+#fmbar{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}#fmbar button{font:inherit;font-size:13.5px;padding:5px 13px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer}
+#fmbar button.on{background:#1f2937;color:#fff;border-color:#1f2937}
+#fmbox{display:none}#fmbox .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+#fmbox select,#fmbox input{font:inherit;font-size:14px;padding:6px 9px;border-radius:9px;border:1px solid #f5b14c;background:var(--bg);color:var(--fg)}
+#fmbox .go{font:inherit;font-weight:700;padding:6px 16px;border-radius:999px;border:1px solid #f5b14c;background:#f5b14c;color:#1a1300;cursor:pointer}
+#fmbox table{border-collapse:collapse;width:100%;font-size:13px}#fmbox td,#fmbox th{border-top:1px solid var(--border);padding:5px 6px;text-align:left;vertical-align:top}
+#fmbox .q{color:var(--fg-dim);font-size:12.5px}#fmbox a{color:var(--accent)}#fmbox .grp{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}#fmbox .grp span{padding:5px 10px;border:1px solid var(--border);border-radius:10px;font-size:12.5px}
+</style>
+<script>
+(function(){try{
+const find=document.getElementById('v3find');if(!find||!window.MATCFG||!window.GX||!GX.RW)return;
+const KO=document.documentElement.lang!=='en',L=(k,e)=>KO?k:e,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const C=window.MATCFG,ORDER=['MX','GR','TMD','BP','MOF','COF'].filter(f=>f==='MX'||C[f]);
+const h2=find.querySelector('h2');const bar=document.createElement('div');bar.id='fmbar';
+bar.innerHTML=ORDER.map(f=>`<button type="button" data-f="${f}" class="${f==='MX'?'on':''}">${f==='MX'?'MXene':esc(C[f].name)}</button>`).join('');
+const box=document.createElement('div');box.id='fmbox';h2.after(bar);bar.after(box);
+const mxKids=()=>[...find.children].filter(c=>c!==h2&&c!==bar&&c!==box);
+const arr=x=>Array.isArray(x)?x:[x],fmt=v=>v>=100?Math.round(v).toLocaleString():(+(+v).toPrecision(3));
+function show(f){bar.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+ if(f==='MX'){mxKids().forEach(c=>{if('fmd' in c.dataset){c.style.display=c.dataset.fmd;delete c.dataset.fmd}});box.style.display='none';return}
+ mxKids().forEach(c=>{if(!('fmd' in c.dataset))c.dataset.fmd=c.style.display;c.style.display='none'});box.style.display='block';
+ const c=C[f],RW=GX.RW[f]||[],PS=c.props.filter(p=>RW.some(r=>r[1]===p.k));if(!PS.length){box.innerHTML='<p class=dim>'+L('이 물질은 아직 찾을 값이 없다','no values to search for this material yet')+'</p>';return}
+ box.innerHTML=`<p class="dim" style="margin:0 0 6px">${L('목표값으로 찾기','Find by target value')} — ${esc(c.name)} · ${L('그 값에 닿은 시료와 «어떤 '+c.ident.t+'·조건에서」 · «질문하기」는 MXene 만(이 물질은 «만든 법」 칸이 아직 없다 · 준비 중)','samples that reached the value, and «which '+c.ident.t+' · condition» · «Ask a question» is MXene-only for now (no «how it was made» column for this material yet)')}</p>
+ <div class="row"><select class="p">${PS.map(p=>`<option value="${p.k}">${esc(p.name)}</option>`).join('')}</select><select class="dir"></select><input class="v" type="number" step="any" style="width:120px"><span class="u dim"></span><button class="go" type="button">${L('찾기','Find')}</button></div><div class="out"></div>`;
+ const $=s=>box.querySelector(s),P=()=>PS.find(p=>p.k===$('.p').value);
+ const setDir=()=>{const p=P();$('.dir').innerHTML=`<option value="ge">${L('이상(≥)','at least (≥)')}</option><option value="le">${L('이하(≤)','at most (≤)')}</option>`;$('.dir').value=p.low?'le':'ge';$('.u').textContent=p.unit+(p.low?L(' · 낮을수록 좋다',' · lower is better'):'');
+  const vs=RW.filter(r=>r[1]===p.k).map(r=>+r[2]).filter(v=>v>0).sort((a,b)=>a-b);$('.v').value=vs.length?fmt(vs[Math.floor(vs.length*(p.low?.25:.75))]).toString().replace(/,/g,''):'';$('.v').placeholder=L('목표값','target')};
+ const run=()=>{const p=P(),raw=$('.v').value.trim(),t=raw===''?NaN:+raw,ge=$('.dir').value==='ge';if(!isFinite(t)){$('.out').innerHTML='';return}
+  const R=RW.filter(r=>r[1]===p.k&&+r[2]>0&&(ge?+r[2]>=t:+r[2]<=t)).sort((a,b)=>ge?b[2]-a[2]:a[2]-b[2]);
+  const G={};R.forEach(r=>arr(c.ident.get(r)).forEach(k=>{G[k]=(G[k]||0)+1}));const K={};const cd=c.conds.find(x=>!x.only||x.only===p.k);if(cd)R.forEach(r=>{const k=String(cd.get(r));K[k]=(K[k]||0)+1});
+  $('.out').innerHTML=`<p><b>${R.length}</b>${L('값',' values')} · ${new Set(R.map(r=>r[0])).size}${L('편이 닿았다',' papers reached it')} (${L('전체','of')} ${RW.filter(r=>r[1]===p.k).length}${L('값 중',' values')})</p>`+
+   (R.length?`<div class="dim" style="font-size:12.5px">${L('어떤 '+c.ident.t+'에서','which '+c.ident.t)}</div><div class="grp">${Object.entries(G).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,n])=>`<span><b>${esc(c.ident.nm(k))}</b> ${n}</span>`).join('')}</div>`+
+   (cd?`<div class="dim" style="font-size:12.5px">${L('어떤 '+cd.t+'에서','which '+cd.t)}</div><div class="grp">${Object.entries(K).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,n])=>`<span><b>${esc(cd.nm(k))}</b> ${n}</span>`).join('')}</div>`:'')+
+   `<table><tr><th>${L('값','value')}</th><th>${L('시료','sample')}</th><th>${esc(c.ident.t)}</th><th>${L('출처','source')}</th></tr>`+R.slice(0,60).map(r=>`<tr><td><b>${fmt(r[2])}</b> ${esc(p.unit)}</td><td>${esc(r[6])}<div class="q">«${esc(r[7])}»</div></td><td>${arr(c.ident.get(r)).map(k=>esc(c.ident.nm(k))).join(', ')}</td><td>${/^10\./.test(r[0])?`<a href="https://doi.org/${esc(r[0])}" target=_blank rel=noopener>doi</a>`:esc(r[0])}</td></tr>`).join('')+`</table>`+(R.length>60?`<div class=dim>${L('위 60줄 · 전부는 성질 둘러보기 «값 목록」·CSV','first 60 rows · all in the property browser value list · CSV')}</div>`:''):`<p class=dim>${L('이 목표에 닿은 값이 없다 — «없다」가 아니라 «우리가 모은 것 중엔 없다」','no value reached this target — not «none», just «none among what we collected»')}</p>`)+
+   `<p class="dim" style="font-size:12px">${L('AI 판정 통과 · 전공자 확인 전 · 조건이 달라 «이렇게 하면 이 값이 나온다」는 보장이 아니다','passed AI judging · not yet expert-checked · conditions differ — not a guarantee that «doing this gives this value»')}</p>`};
+ $('.p').addEventListener('change',()=>{setDir();run()});$('.go').addEventListener('click',run);$('.v').addEventListener('keydown',e=>{if(e.key==='Enter')run()});$('.dir').addEventListener('change',run);setDir();run()}
+bar.addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(b)show(b.dataset.f)});
+}catch(e){console.error('findmat layer',e)}})();
+</script>
+
+<style>
 .tidyrow{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
 .tidybtn{font:inherit;font-size:13.5px;font-weight:600;border-radius:999px;padding:7px 16px;cursor:pointer;border:1px solid #f5b14c;background:#f5b14c;color:#1a1300}
 .tidybtn.ghost{background:#fff8ec;color:#7a4b00}
@@ -1337,7 +1378,11 @@ fb.addEventListener('click',e=>{const bt=e.target.closest('button[data-f]');if(!
 #v3exp details>summary,#v3find details>summary,#v3top details>summary{display:inline-block;cursor:pointer;font-weight:600;font-size:13.5px;border-radius:999px;padding:5px 14px;border:1px solid #f5b14c;background:#fff8ec;color:#7a4b00;list-style:none}
 #v3exp details>summary::-webkit-details-marker,#v3find details>summary::-webkit-details-marker,#v3top details>summary::-webkit-details-marker{display:none}
 #v3exp details>summary::before,#v3find details>summary::before,#v3top details>summary::before{content:'▶ '}#v3exp details[open]>summary::before,#v3find details[open]>summary::before,#v3top details[open]>summary::before{content:'▼ '}
-#hero #qans:not(:empty){margin-top:40px;max-height:40vh;overflow:auto}/* 10/26 «이렇게 보세요」 답이 물질 단추 줄과 겹쳤다 → 단추 줄 밑에서 시작 */.famstr{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.famstr span{min-width:96px;padding:6px 10px;border:1px solid var(--border,#ddd);border-radius:10px;font-size:12.5px;line-height:1.35}.famstr b{display:block;font-size:14px}
+#hero #qans:not(:empty){margin-top:40px;max-height:40vh;overflow:auto}/* 10/26 «이렇게 보세요」 답이 물질 단추 줄과 겹쳤다 → 단추 줄 밑에서 시작 */#v3exp .v3tabs,#v3find .v3tabs,.mvw .v3tabs{border-bottom:0;gap:8px;margin:10px 0 12px;flex-wrap:wrap}
+#v3exp .v3tabs button,#v3find .v3tabs button,.mvw .v3tabs button{border:1.5px solid #f5b14c;border-radius:999px;padding:7px 18px;font-weight:600;color:#7a4b00;background:#fff8ec}
+#v3exp .v3tabs button.on,#v3find .v3tabs button.on,.mvw .v3tabs button.on{background:#f5b14c;color:#1a1300;border-color:#f5b14c}/* 10/26 저녁 «각 탭이 중요하니 눈에 띄게」 */
+#notesbox{margin:10px auto 10px;max-width:1100px;padding:10px 16px;border:1px solid var(--border,#ccc);border-radius:12px;font-size:12.5px;color:var(--fg-dim)}#notesbox .v3row{margin:4px 0!important}
+.famstr{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.famstr span{min-width:96px;padding:6px 10px;border:1px solid var(--border,#ddd);border-radius:10px;font-size:12.5px;line-height:1.35}.famstr b{display:block;font-size:14px}
 </style>
 <script>
 (function(){try{
@@ -1361,6 +1406,10 @@ if(nb){const det=document.createElement('details');det.id='newdet';
  [800,2500,6000].forEach(ms=>setTimeout(re,ms));
  if(tl){const b2=mkb(L('🕒 걸어온 길 ↓','🕒 How it grew ↓'),'ghost');b2.addEventListener('click',()=>{tl.open=true;tl.scrollIntoView({behavior:'smooth',block:'start'})});row.append(b2)}}
 if(!row.parentNode){const t=document.getElementById('v3top');if(t&&row.childElementCount)t.append(row)}
+/* ⑤ 안내 줄(기계 추출 · CC BY …)·🎬 배경 강연 = 맨 아래 «최근 7일」 밑으로(10/26 저녁 · 내려받기 단추는 제자리) */
+{const dl=document.getElementById('v3dl'),vid=document.getElementById('v3vid');const lic=dl&&[...dl.querySelectorAll('span.dim')].find(s=>/CC BY/.test(s.textContent));
+ if(lic||vid){const nb2=document.createElement('div');nb2.id='notesbox';if(lic){const d=document.createElement('div');d.textContent=lic.textContent;nb2.append(d);lic.remove()}if(vid)nb2.append(vid);
+  const anchor=document.getElementById('newdet')||document.getElementById('tlbox');if(anchor)anchor.after(nb2);else{const ft=document.querySelector('footer');if(ft)ft.before(nb2)}}}
 /* ② 조성 칸 표 — 주황 단추로 펴기 */
 const mx=document.getElementById('mxn');
 if(mx){mx.style.display='none';const b=mkb(L('▶ 조성 칸 전부 보기 — Ti·V·Nb·Ta·Cr·Mo·W 마다 Ti₂C·Ti₃C₂… 값 수','▶ Show all composition cells — Ti₂C · Ti₃C₂ … per metal, with value counts'));b.style.margin='6px 0';

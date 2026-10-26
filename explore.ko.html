@@ -1946,8 +1946,20 @@ let FAM='mx';
 const _lay=layoutTowers;layoutTowers=function(){_lay.apply(this,arguments);Object.values(towers).forEach(t=>{const isM=!!t.userData.mof;
  if(FAM==='mx'&&isM)t.visible=false;if(FAM==='mof'&&!isM)t.visible=false})};
 const _fog=layoutFog;layoutFog=function(){_fog.apply(this,arguments);if(FAM==='mof')fogs.forEach(f=>f.visible=false)};
+/* 10/26 저녁 버그(«MOF 를 누른 채 정전용량을 누르면 MXene 연결고리가 보인다」): 숨긴 탑에도 성질 행성의 빛줄기가 그려졌다
+   → 빛줄기는 보이는 탑에만 · 보이는 탑에 이 성질 값이 하나도 없으면 행성도 숨기고 한 줄 알림 · MOF 만 볼 땐 MXene 조성 바로가기도 숨김 */
+const _ub=updateBeams;updateBeams=function(t){_ub.apply(this,arguments);if(!planet)return;let any=false;planet.beams.forEach(b=>{const v=b.tower.visible!==false;b.mesh.visible=v;if(v)any=true});
+ planet.grp.visible=any||cur==='ALL';const nv=document.getElementById('famnone');if(nv)nv.style.display=(!any&&cur!=='ALL'&&FAM==='mof')?'block':'none'};
+/* 10/26 저녁 «성질 단추가 너무 많다 · 눌러서 떠오르게」: 성질 칩을 접는다 — 고른 성질 하나 + «지도에서 보기」만 보이고 · «성질 고르기 ▾」를 누르면 전부(분야별) · 고르면 다시 접힘 */
+{const ch3=document.getElementById('chips');if(ch3){const st=document.createElement('style');st.textContent='#chips.cx .grp>span{display:none}#chips.cx .grp button.chip:not(.on){display:none}#chips.cx .grp:has(button.chip):not(:has(button.on)){display:none}#propsel{font:inherit;font-size:14px;font-weight:700;border-radius:999px;padding:6px 16px;cursor:pointer;border:1.5px solid #ffb86b;background:#ffb86b;color:#1a1208;margin:6px 0}';document.head.append(st);
+ const n=ch3.querySelectorAll('button.chip').length;const pb=document.createElement('button');pb.type='button';pb.id='propsel';const lab=()=>{pb.textContent=ch3.classList.contains('cx')?L(`▼ 성질 고르기 — ${n-1}개 · 분야별(전기·에너지 · 빛·열 · 구조·표면 · 센서 · 담수화)`,`▼ Pick a property — ${n-1} · by field`):L('▲ 성질 목록 접기','▲ Hide the property list')};
+ ch3.classList.add('cx');lab();pb.addEventListener('click',()=>{ch3.classList.toggle('cx');lab()});ch3.before(pb);
+ ch3.addEventListener('click',e=>{if(e.target.closest('button[data-k]')){setTimeout(()=>{ch3.classList.add('cx');lab()},0)}})}}
+{const nn=document.createElement('div');nn.id='famnone';nn.style.cssText='display:none;margin:6px 0;padding:8px 12px;border:1px solid #ffb86b;border-radius:10px;font-size:13px;color:#ffd7a8;background:rgba(255,184,107,.08)';
+ nn.innerHTML=L('MOF 에는 이 성질 값이 아직 없다(MOF 첫 판 = BET 하나) — «없다」가 아니라 «아직 못 모았다」 · BET(비표면적)을 고르거나 «함께 보기」로','MOF has no values for this property yet (MOF first version = BET only) — not «none», just «not collected yet» · pick BET (surface area) or «together»');
+ const ch2=document.getElementById('chips');if(ch2)ch2.after(nn)}
 const note=document.createElement('div');note.id='famnote';
-function setFam(f){FAM=f;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));grp.visible=f!=='mx';
+function setFam(f){FAM=f;sw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.f===f));grp.visible=f!=='mx';{const cb=document.getElementById('compbar');if(cb)cb.style.display=f==='mof'?'none':''}
  if(f!=='mx'&&cur!=='ALL'&&cur!=='BET m²/g'&&typeof setProp==='function')setProp('BET m²/g');else{layoutTowers();layoutFog()}
  note.style.display=f==='mx'?'none':'block';
  note.innerHTML=f==='mof'?L(`🆕 <b>MOF</b> — 같은 주기율표의 금속 노드 칸 위 <b>육각 탑</b> = MOF 이름 묶음(ZIF-8 · UiO-66 …) · 높이 = 모은 BET 값 개수 · 성질은 아직 BET 하나(첫 판 · AI 판정 통과 · 전공자 확인 전) · 값 표 = <a href="${ISL}#MOF">MOF 섬 페이지</a>`,`🆕 <b>MOF</b> — hexagonal towers on the metal-node cells of the same periodic table = MOF name groups (ZIF-8, UiO-66 …) · height = number of BET values · one property so far (first version · passed AI judging · not yet expert-checked) · table: <a href="${ISL}#MOF">MOF island page</a>`)
