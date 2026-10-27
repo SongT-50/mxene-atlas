@@ -1428,5 +1428,55 @@ if(fb&&fv&&window.GX&&GX.RW){
   fv.prepend(card)})}
 }catch(e){console.error('tidy layer',e)}})();
 </script>
+
+<style>
+#fsA{position:absolute;left:28px;top:96px;z-index:6;width:min(520px,calc(100vw - 56px));background:rgba(12,15,28,.86);border:1px solid rgba(124,196,255,.35);border-radius:14px;padding:16px 18px;color:#e8e8f0;backdrop-filter:blur(4px);font-size:15px;line-height:1.55}
+#fsA .def{font-size:17px;font-weight:600;margin:0 0 10px}
+#fsA .nums{display:flex;gap:18px;margin:0 0 10px;flex-wrap:wrap}
+#fsA .nums div{min-width:84px}#fsA .nums b{display:block;font-size:24px;color:#7cc4ff;line-height:1.1}#fsA .nums span{font-size:12px;color:#9aa0b8}
+#fsA .diff{font-size:13px;color:#c8cbe0;margin:0 0 12px}
+#fsA .go{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+#fsA .go button{font:inherit;font-weight:700;background:#f5b14c;color:#1a1a1a;border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
+#fsA .go a{color:#9fd0ff;font-size:14px}
+#fsA .warn{font-size:12px;color:#9aa0b8;margin-top:10px}
+#fsMenu{position:absolute;right:24px;top:22px;z-index:7}
+#fsMenu>button{font:inherit;background:rgba(20,24,42,.9);color:#e8e8f0;border:1px solid #39405c;border-radius:10px;padding:7px 14px;cursor:pointer}
+#fsMenu .m{display:none;position:absolute;right:0;top:44px;background:#14182a;border:1px solid #39405c;border-radius:10px;padding:8px;min-width:240px}
+#fsMenu.on .m{display:block}#fsMenu .m a{border:0!important;background:none!important;box-shadow:none!important}#fsMenu .m a{display:block;padding:7px 10px;color:#e8e8f0;text-decoration:none;border-radius:6px}#fsMenu .m a:hover{background:#232a45}
+.fsHide{display:none!important}
+#hero .hcap .hsub{display:none}
+@media (max-width:640px){#fsA .diff{display:none}#fsA{left:12px;top:84px;width:calc(100vw - 24px);padding:12px 14px;font-size:14px}#fsA .def{font-size:15px}#fsA .nums b{font-size:20px}#fsMenu{right:12px;top:16px}}
+</style>
+<script>
+(function(){try{
+const EN=document.documentElement.lang==='en',T=(k,e)=>EN?e:k;
+const hero=document.getElementById('hero');if(!hero)return;
+const card=document.createElement('div');card.id='fsA';
+card.innerHTML=`<p class="def">${T('MXene 논문에서 뽑은 숫자마다, 그 숫자가 나온 원문 문장과 «어떻게 만들었나」를 붙여 둔 지도','A map of numbers pulled from MXene papers — each with the sentence it came from and how the sample was made')}</p>
+<div class="nums"><div><b>4,768</b><span>${T('MXene 값','MXene values')}</span></div><div><b>898</b><span>${T('MXene 논문','MXene papers')}</span></div><div><b>+5</b><span>${T('이웃 물질(그래핀·TMD…)','neighbour materials')}</span></div><div><b>100%</b><span>${T('값마다 원문 문장','values with a source sentence')}</span></div></div>
+<p class="diff">${T('다른 DB 와 다른 점: 숫자만 모은 게 아니라 «어느 문장에서 · 어떤 시료로 · 어떻게 만들어」 나온 값인지 함께 보여 준다. AI 판정자 둘이 원문과 대조했고, 사람 확인은 아직이다.','Unlike value-only databases, every number keeps its sentence, sample and recipe. Two AI judges checked each against the source; no human check yet.')}</p>
+<div class="go"><button type="button" id="fsStart">${T('▶ 값 하나 열어 보기 (10초)','▶ Open one value (10 s)')}</button><a href="#" id="fsDown">${T('성질 둘러보기 ↓','Browse properties ↓')}</a><a href="#" id="fsTour">${T('3D 읽는 법','How to read the 3D')}</a></div>`;
+hero.append(card);
+/* 메뉴 7개 → «메뉴 ▾」 하나 (English 만 밖에) */
+const nav=hero.querySelector('.hnav');
+if(nav){const menu=document.createElement('div');menu.id='fsMenu';const b=document.createElement('button');b.type='button';b.textContent=T('메뉴 ▾','Menu ▾');const m=document.createElement('div');m.className='m';
+m.id='fsMenuList';b.setAttribute('aria-controls','fsMenuList');b.setAttribute('aria-expanded','false');
+[...nav.querySelectorAll('a')].forEach(a=>m.append(a));/* 복제하지 않고 옮긴다 — «처음 쓰는 법」 칩은 클릭 처리가 JS 로 붙어 있어 복제하면 죽는다(10/27 Codex 리뷰) */
+const setM=on=>{menu.classList.toggle('on',on);b.setAttribute('aria-expanded',on?'true':'false')};b.onclick=e=>{e.stopPropagation();setM(!menu.classList.contains('on'))};document.addEventListener('click',()=>setM(false));
+menu.append(b,m);hero.append(menu);nav.classList.add('fsHide')}
+/* 읽는 법 줄·안내 줄·범례는 접어 둔다 → «3D 읽는 법」 을 누르면 편다 */
+const folded=['#hq','#htour','.hleg'].map(s=>hero.querySelector(s)||document.querySelector(s)).filter(Boolean);
+folded.forEach(x=>x.classList.add('fsHide'));
+const tour=document.getElementById('fsTour');tour.setAttribute('aria-expanded','false');tour.onclick=e=>{e.preventDefault();folded.forEach(x=>x.classList.toggle('fsHide'));tour.setAttribute('aria-expanded',folded.length&&!folded[0].classList.contains('fsHide')?'true':'false')};
+document.getElementById('fsDown').onclick=e=>{e.preventDefault();const c=document.getElementById('hcue');if(c)c.click();else window.scrollBy({top:innerHeight,behavior:'smooth'})};
+/* 처음 오면 뜨던 안내 창 대신 → 큰 단추 하나가 그 안내를 부른다 */
+const hideHow=()=>{const g=document.getElementById('howbg');if(g&&!window.__fsAsked)g.classList.remove('on')};/* 창을 «닫힌 상태」로 둔다 — style 로 숨기면 메뉴의 «처음 쓰는 법」도 못 연다(10/27 시험) */
+addEventListener('pointerdown',()=>{window.__fsAsked=1},{once:true,capture:true});/* 사람이 먼저 누르면 늦은 닫기가 그 창을 닫지 않게 */setTimeout(hideHow,50);setTimeout(hideHow,600);setTimeout(hideHow,1500);
+document.getElementById('fsStart').onclick=()=>{window.__fsAsked=1;const h=document.getElementById('howbtn')||hero.querySelector('.howchip');if(h)h.click()};
+/* 물질 단추 줄(gxbar)이 카드에 가려지지 않게 카드 바로 밑으로 */
+const place=()=>{const g=document.getElementById('gxbar');if(!g)return;const hr=hero.getBoundingClientRect(),cr=card.getBoundingClientRect();g.style.position='absolute';g.style.left=(cr.left-hr.left)+'px';g.style.top=(cr.bottom-hr.top+10)+'px';g.style.right='auto';g.style.bottom='auto';g.style.transform='none';g.style.maxWidth=cr.width+'px';if(g.parentElement!==hero)hero.append(g)};
+[100,800,2000].forEach(ms=>setTimeout(place,ms));addEventListener('resize',place);
+}catch(e){console.error('fsA',e)}})();
+</script>
 <script data-goatcounter="https://mxene-atlas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body></html>
