@@ -1441,7 +1441,8 @@ if(fb&&fv&&window.GX&&GX.RW){
 #fsX{position:absolute;right:8px;top:8px;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#c8cbe0;font-size:18px;cursor:pointer}#fsX:hover{background:#232a45}#fsA .def{padding-right:28px}
 #fsOpen{position:absolute;left:28px;top:96px;z-index:6;font:inherit;font-size:14px;background:rgba(12,15,28,.86);color:#e8e8f0;border:1px solid rgba(124,196,255,.35);border-radius:10px;padding:7px 12px;cursor:pointer}
 #fsA .warn{font-size:12px;color:#9aa0b8;margin-top:10px}
-#fsMenu{position:absolute;right:24px;top:22px;z-index:7}
+#fsMenu{position:absolute;right:24px;top:22px;z-index:7;display:flex;gap:8px;align-items:center}
+#fsMenu>a.fsLang{font:inherit;background:rgba(20,24,42,.9);color:#e8e8f0;border:1px solid #39405c;border-radius:10px;padding:7px 12px;text-decoration:none}#fsMenu>a.fsLang:hover{background:#232a45}
 #fsMenu>button{font:inherit;background:rgba(20,24,42,.9);color:#e8e8f0;border:1px solid #39405c;border-radius:10px;padding:7px 14px;cursor:pointer}
 #fsMenu .m{display:none;position:absolute;right:0;top:44px;background:#14182a;border:1px solid #39405c;border-radius:10px;padding:8px;min-width:240px}
 #fsMenu.on .m{display:block}#fsMenu .m a{border:0!important;background:none!important;box-shadow:none!important}#fsMenu .m a{display:block;padding:7px 10px;color:#e8e8f0;text-decoration:none;border-radius:6px}#fsMenu .m a:hover{background:#232a45}
@@ -1472,7 +1473,9 @@ const nav=hero.querySelector('.hnav');
 if(nav){const menu=document.createElement('div');menu.id='fsMenu';const b=document.createElement('button');b.type='button';b.textContent=T('메뉴 ▾','Menu ▾');const m=document.createElement('div');m.className='m';
 m.id='fsMenuList';b.setAttribute('aria-controls','fsMenuList');b.setAttribute('aria-expanded','false');
 const RK=h=>/howchip/.test(h.className)?0:/islands/.test(h.getAttribute('href')||'')?1:/flow/.test(h.getAttribute('href')||'')?2:/galaxy/.test(h.getAttribute('href')||'')?9:5;/* 10/27 «넓어지는 지도는 뒤로 · 레시피 표는 물질별 값 표 밑으로」 */
-[...nav.querySelectorAll('a')].sort((x,y)=>RK(x)-RK(y)).forEach(a=>m.append(a));/* 복제하지 않고 옮긴다 — «처음 쓰는 법」 칩은 클릭 처리가 JS 로 붙어 있어 복제하면 죽는다(10/27 Codex 리뷰) */
+const lang=[...nav.querySelectorAll('a')].filter(a=>/^(English|한국어)$/.test(a.textContent.trim()));
+lang.forEach(a=>{a.classList.add('fsLang');menu.append(a)});
+[...nav.querySelectorAll('a')].filter(a=>!lang.includes(a)).sort((x,y)=>RK(x)-RK(y)).forEach(a=>m.append(a));/* 복제하지 않고 옮긴다 — «처음 쓰는 법」 칩은 클릭 처리가 JS 로 붙어 있어 복제하면 죽는다(10/27 Codex 리뷰) */
 const setM=on=>{menu.classList.toggle('on',on);b.setAttribute('aria-expanded',on?'true':'false')};b.onclick=e=>{e.stopPropagation();setM(!menu.classList.contains('on'))};document.addEventListener('click',()=>setM(false));
 menu.append(b,m);hero.append(menu);nav.classList.add('fsHide')}
 /* 읽는 법 줄·안내 줄·범례는 접어 둔다 → «3D 읽는 법」 을 누르면 편다 */
