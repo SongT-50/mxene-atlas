@@ -1438,6 +1438,8 @@ if(fb&&fv&&window.GX&&GX.RW){
 #fsA .go{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 #fsA .go button{font:inherit;font-weight:700;background:#f5b14c;color:#1a1a1a;border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
 #fsA .go a{color:#9fd0ff;font-size:14px}
+#fsX{position:absolute;right:8px;top:8px;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#c8cbe0;font-size:18px;cursor:pointer}#fsX:hover{background:#232a45}#fsA .def{padding-right:28px}
+#fsOpen{position:absolute;left:28px;top:96px;z-index:6;font:inherit;font-size:14px;background:rgba(12,15,28,.86);color:#e8e8f0;border:1px solid rgba(124,196,255,.35);border-radius:10px;padding:7px 12px;cursor:pointer}
 #fsA .warn{font-size:12px;color:#9aa0b8;margin-top:10px}
 #fsMenu{position:absolute;right:24px;top:22px;z-index:7}
 #fsMenu>button{font:inherit;background:rgba(20,24,42,.9);color:#e8e8f0;border:1px solid #39405c;border-radius:10px;padding:7px 14px;cursor:pointer}
@@ -1445,7 +1447,7 @@ if(fb&&fv&&window.GX&&GX.RW){
 #fsMenu.on .m{display:block}#fsMenu .m a{border:0!important;background:none!important;box-shadow:none!important}#fsMenu .m a{display:block;padding:7px 10px;color:#e8e8f0;text-decoration:none;border-radius:6px}#fsMenu .m a:hover{background:#232a45}
 .fsHide{display:none!important}
 #hero .hcap .hsub{display:none}
-@media (max-width:640px){#fsA .diff{display:none}#fsA{left:12px;top:84px;width:calc(100vw - 24px);padding:12px 14px;font-size:14px}#fsA .def{font-size:15px}#fsA .nums b{font-size:20px}#fsMenu{right:12px;top:16px}}
+@media (max-width:640px){#fsOpen{left:12px;top:84px}#fsA .diff{display:none}#fsA{left:12px;top:84px;width:calc(100vw - 24px);padding:12px 14px;font-size:14px}#fsA .def{font-size:15px}#fsA .nums b{font-size:20px}#fsMenu{right:12px;top:16px}}
 </style>
 <script>
 (function(){try{
@@ -1457,11 +1459,20 @@ card.innerHTML=`<p class="def">${T('MXene 논문에서 뽑은 숫자마다, 그 
 <p class="diff">${T('다른 DB 와 다른 점: 숫자만 모은 게 아니라 «어느 문장에서 · 어떤 시료로 · 어떻게 만들어」 나온 값인지 함께 보여 준다. AI 판정자 둘이 원문과 대조했고, 사람 확인은 아직이다.','Unlike value-only databases, every number keeps its sentence, sample and recipe. Two AI judges checked each against the source; no human check yet.')}</p>
 <div class="go"><button type="button" id="fsStart">${T('▶ 값 하나 열어 보기 (10초)','▶ Open one value (10 s)')}</button><a href="#" id="fsDown">${T('성질 둘러보기 ↓','Browse properties ↓')}</a><a href="#" id="fsTour">${T('3D 읽는 법','How to read the 3D')}</a></div>`;
 hero.append(card);
+/* 10/27 «카드가 계속 떠 있어 뒤 지도가 안 보인다 → 닫기」: ✕ 로 접고, 작은 «ⓘ 이 지도는?」 단추로 다시 편다 · 접은 것은 이 브라우저에만 기억 */
+const KEYC='mxAtlasCardClosed1';
+const x=document.createElement('button');x.type='button';x.id='fsX';x.setAttribute('aria-label',T('닫기','Close'));x.textContent='✕';card.append(x);
+const re_=document.createElement('button');re_.type='button';re_.id='fsOpen';re_.textContent=T('ⓘ 이 지도는?','ⓘ About this map');hero.append(re_);
+const setCard=open=>{card.classList.toggle('fsHide',!open);re_.classList.toggle('fsHide',open);try{open?localStorage.removeItem(KEYC):localStorage.setItem(KEYC,'1')}catch(_){}setTimeout(()=>window.__fsPlace&&window.__fsPlace(),0)};
+x.onclick=()=>setCard(false);re_.onclick=()=>setCard(true);
+let closed0=false;try{closed0=localStorage.getItem(KEYC)==='1'}catch(_){}
+card.classList.toggle('fsHide',closed0);re_.classList.toggle('fsHide',!closed0);
 /* 메뉴 7개 → «메뉴 ▾」 하나 (English 만 밖에) */
 const nav=hero.querySelector('.hnav');
 if(nav){const menu=document.createElement('div');menu.id='fsMenu';const b=document.createElement('button');b.type='button';b.textContent=T('메뉴 ▾','Menu ▾');const m=document.createElement('div');m.className='m';
 m.id='fsMenuList';b.setAttribute('aria-controls','fsMenuList');b.setAttribute('aria-expanded','false');
-[...nav.querySelectorAll('a')].forEach(a=>m.append(a));/* 복제하지 않고 옮긴다 — «처음 쓰는 법」 칩은 클릭 처리가 JS 로 붙어 있어 복제하면 죽는다(10/27 Codex 리뷰) */
+const RK=h=>/howchip/.test(h.className)?0:/islands/.test(h.getAttribute('href')||'')?1:/flow/.test(h.getAttribute('href')||'')?2:/galaxy/.test(h.getAttribute('href')||'')?9:5;/* 10/27 «넓어지는 지도는 뒤로 · 레시피 표는 물질별 값 표 밑으로」 */
+[...nav.querySelectorAll('a')].sort((x,y)=>RK(x)-RK(y)).forEach(a=>m.append(a));/* 복제하지 않고 옮긴다 — «처음 쓰는 법」 칩은 클릭 처리가 JS 로 붙어 있어 복제하면 죽는다(10/27 Codex 리뷰) */
 const setM=on=>{menu.classList.toggle('on',on);b.setAttribute('aria-expanded',on?'true':'false')};b.onclick=e=>{e.stopPropagation();setM(!menu.classList.contains('on'))};document.addEventListener('click',()=>setM(false));
 menu.append(b,m);hero.append(menu);nav.classList.add('fsHide')}
 /* 읽는 법 줄·안내 줄·범례는 접어 둔다 → «3D 읽는 법」 을 누르면 편다 */
@@ -1474,8 +1485,8 @@ const hideHow=()=>{const g=document.getElementById('howbg');if(g&&!window.__fsAs
 addEventListener('pointerdown',()=>{window.__fsAsked=1},{once:true,capture:true});/* 사람이 먼저 누르면 늦은 닫기가 그 창을 닫지 않게 */setTimeout(hideHow,50);setTimeout(hideHow,600);setTimeout(hideHow,1500);
 document.getElementById('fsStart').onclick=()=>{window.__fsAsked=1;const h=document.getElementById('howbtn')||hero.querySelector('.howchip');if(h)h.click()};
 /* 물질 단추 줄(gxbar)이 카드에 가려지지 않게 카드 바로 밑으로 */
-const place=()=>{const g=document.getElementById('gxbar');if(!g)return;const hr=hero.getBoundingClientRect(),cr=card.getBoundingClientRect();g.style.position='absolute';g.style.left=(cr.left-hr.left)+'px';g.style.top=(cr.bottom-hr.top+10)+'px';g.style.right='auto';g.style.bottom='auto';g.style.transform='none';g.style.maxWidth=cr.width+'px';if(g.parentElement!==hero)hero.append(g)};
-[100,800,2000].forEach(ms=>setTimeout(place,ms));addEventListener('resize',place);
+const place=()=>{const g=document.getElementById('gxbar');if(!g)return;const hr=hero.getBoundingClientRect(),cr=(card.classList.contains('fsHide')?re_:card).getBoundingClientRect();g.style.position='absolute';g.style.left=(cr.left-hr.left)+'px';g.style.top=(cr.bottom-hr.top+10)+'px';g.style.right='auto';g.style.bottom='auto';g.style.transform='none';g.style.maxWidth=Math.max(cr.width,520)+'px';if(g.parentElement!==hero)hero.append(g)};
+window.__fsPlace=place;[100,800,2000].forEach(ms=>setTimeout(place,ms));addEventListener('resize',place);
 }catch(e){console.error('fsA',e)}})();
 </script>
 <script data-goatcounter="https://mxene-atlas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
