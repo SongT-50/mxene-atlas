@@ -17,6 +17,6 @@ No human expert check yet, so nothing is labelled "verified".
 (rights holders who would like a paper's sentences removed: requests are handled promptly).
 Earlier comments (before 2026-10-17) are at https://github.com/SongT-50/mxene-3d/issues.
 
-**Licence.** © 2026 Tae-Eun Song, all rights reserved. Linking is welcome; please do not copy or redistribute without permission.
+**Licence.** Values table (the CSV you download from the map): CC BY 4.0 — credit: Song, T.-E. MXene Atlas (2026). Quoted source sentences: each paper's own licence. Map screens, code and text: © 2026 Tae-Eun Song, all rights reserved — linking is welcome; please do not copy or redistribute them without permission.
 
 **How to cite.** Song, T.-E. *MXene Atlas* (2026). https://songt-50.github.io/mxene-atlas/ (first published 2026-10-11)
