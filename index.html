@@ -1149,6 +1149,11 @@ if(location.hash==='#ask')open_('','');
  const d=document.createElement('div');d.id='askband';
  d.innerHTML=`<span>🧪 ${T('MXene을 다뤄 보셨나요? 쉬운 질문 5개에 답해 주시면 지도가 정확해져요','Have you worked with MXenes? Five easy questions help make this map more accurate')}</span><span class="dim">${T('1분 · 하나만 답해도 돼요 · 로그인 없음','1 minute · one answer is enough · no login')}</span><a class="askbtn" href="questions.html">${T('질문 5개 답하기 →','Answer 5 questions →')}</a>`;
  w.prepend(d);
+ 
+ const pub=/\/ko\.html$/.test(location.pathname),ah=EN?'answers.en.html':(pub?'answers.ko.html':'answers.html');
+ const b=document.createElement('div');b.id='ansband';b.style.cssText='margin:0 0 6px;padding:6px 14px;font-size:13.5px';
+ b.innerHTML=`📌 ${T('이 지도로 무엇을 알 수 있나 — 미리 정한 질문 20개에 지도가 낸 답(1등 값 · 원문 문장 · 만든 법)','What can this map tell you — its answers to 20 fixed questions (top value · source sentence · how it was made)')} <a href="${ah}">${T('질문 20 보기 →','See the 20 answers →')}</a>`;
+ d.after(b);
  const a=document.createElement('div');a.id='accband';
  a.innerHTML=`🔎 ${T('AI 판정은 얼마나 맞나 — 내부 시험(10/24 · 맞는 값 122 + 틀리게 바꾼 값 48)','How accurate is the AI check — internal test (Oct 24 · 122 correct values + 48 altered ones)')}: <b>MXene</b> ${T('맞는 값 인정','correct values accepted')} 98–100% · <b>MOF</b> 98–100% · <b>COF</b> 97–100% · ${T('일부러 틀리게 바꾼 값','deliberately altered values caught')} 48/48 · ${T('<b>실제로 틀렸던 값(어려운 시험)</b> 판정 단계가 잡은 비율','<b>values that were actually wrong (hard test)</b> caught at the judging step')} MXene 2/35 · MOF 13/40 · COF 7/30<span class="dim"> · ${T('그런 값(단위·기준·범위 오류)은 그다음 원문 대조 표본에서 걸러 왔고, 판정 단계가 직접 잡도록 고치는 중 · 정답 = 원문과 직접 대조한 값 · 전공자 확인 전','such values (unit, basis or scope errors) were removed by a later source-checked sample; we are changing the judging step to catch them · answer key = values checked against the source · not yet expert-checked')} · ${T('<b>남이 만든 사람 정답으로 처음 잰 값</b>: 합금 논문 19편(LitXAlloy) 항복 강도 66/67 일치 · 다른 분야라 MXene 정확도와 같은 뜻은 아님','<b>first check against an outside human answer key</b>: 19 alloy papers (LitXAlloy), yield strength 66/67 matched · a different field, so not the same as MXene accuracy')}</span>`;
  d.after(a);
