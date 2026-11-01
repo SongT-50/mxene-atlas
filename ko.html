@@ -1248,9 +1248,9 @@ if(fh){const go=()=>{const bt=document.querySelector('#famb button[data-f=CMP]')
 <style>
 .mvw .mvtop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 6px}
 .mvw .mvlab{color:#c97f0a;font-weight:700;font-size:14px}
-.mvw select{font:inherit;font-size:15px;padding:7px 10px;border-radius:10px;border:1px solid #f5b14c;background:var(--bg);color:var(--fg);min-width:240px}
-.mvw .bar button{font:inherit;font-size:13px;padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer}
-.mvw .bar button.on{border-color:var(--accent);color:var(--accent);font-weight:700;background:rgba(122,162,255,.12)}
+.mvw select{font:inherit;font-size:15px;font-weight:600;padding:7px 10px;border-radius:10px;border:1.5px solid #f5b14c;background:var(--bg);color:var(--fg);min-width:240px}/* 11/1 MXene 성질 고르기와 같게(굵은 테두리·진한 글자) */
+.mvw .bar button{font:inherit;font-size:13px;padding:5px 12px;border-radius:16px;border:1px solid var(--border);background:#fff;color:var(--fg);cursor:pointer}
+.mvw .bar button.on{border-color:var(--accent);color:var(--accent);font-weight:400;background:#fff;box-shadow:0 0 0 1px var(--accent) inset}/* 11/1 MXene 거르기 단추와 같은 모양 */
 .mvw .mvpane{display:none}.mvw .mvpane.on{display:block}
 .mvw .mvcells{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
 .mvw .mvcells button{min-width:104px;text-align:left;padding:7px 10px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--fg);font:inherit;font-size:12.5px;cursor:pointer;line-height:1.35}
@@ -1312,8 +1312,8 @@ function build(f){const C=CFG[f],RW=GX.RW[f]||[],PS=C.props.filter(p=>RW.some(r=
   let g=`<svg viewBox="0 0 ${W} ${H}">`;for(let e=a;e<=b;e++){const xx=X(10**e);g+=`<line x1="${xx}" y1="8" x2="${xx}" y2="${H-22}" style="stroke:var(--border)"/><text x="${xx}" y="${H-6}" style="fill:var(--fg-dim)" font-size="13" text-anchor="middle">${10**e>=1?(10**e).toLocaleString():10**e}</text>`}
   g+=`<text x="${x1}" y="${H-24}" style="fill:var(--fg-dim)" font-size="12.5" text-anchor="end">${esc(P().unit)} · ${L('로그 축','log scale')}${P().low?' · '+L('낮을수록 좋다','lower is better'):''}</text>`;
   ids.forEach((id,i)=>{const y=22+i*RH,rr=R.filter(r=>idk(r).includes(id));g+=`<text x="8" y="${y+5}" fill="${C.col}" font-size="14" font-weight="700">${esc(C.ident.nm(id))}</text><text x="8" y="${y+20}" style="fill:var(--fg-dim)" font-size="12">${rr.length}${L('값',' values')}</text>`;
-   rr.forEach((r,n)=>{g+=`<circle cx="${X(+r[2]).toFixed(1)}" cy="${y+((n*37)%17-8)}" r="3.6" fill="${C.col}" fill-opacity="${r[9]?.85:.4}" data-j="${RW.indexOf(r)}" style="cursor:pointer"><title>${esc(r[2]+' '+P().unit+' · '+r[6])}</title></circle>`})});
-  $('[data-p=dist]').innerHTML=g+`</svg><div class="dim" style="font-size:12.5px">${L('점 = 값 하나 · 흐린 점 = 복합체 · 점을 누르면 원문','dot = one value · faint = composite · click a dot for the source sentence')}</div>`}
+   rr.forEach((r,n)=>{g+=`<circle cx="${X(+r[2]).toFixed(1)}" cy="${y+((n*37)%17-8)}" r="3.6" fill="${C.col}" fill-opacity="${r[9]?.9:.65}" stroke="${C.col}" stroke-opacity=".9" stroke-width="${r[9]?0:1}" data-j="${RW.indexOf(r)}" style="cursor:pointer"><title>${esc(r[2]+' '+P().unit+' · '+r[6])}</title></circle>`})});
+  $('[data-p=dist]').innerHTML=g+`</svg><div class="dim" style="font-size:12.5px">${L('● 판정 지지(두 AI 판정자 통과 · 이 칸 값은 전부) · 테두리 있는 점 = 복합체(섞은 재료) · 점을 누르면 원문','● judges agree (two AI judges passed · every value here) · ringed dot = composite (mixed material) · click a dot for the source sentence')}</div>`}
  function list(){const R=rows().slice().sort((x,y)=>P().low?x[2]-y[2]:y[2]-x[2]);
   $('[data-p=list]').innerHTML=`<table><tr><th>${L('값','value')}</th><th>${L('시료','sample')}</th><th>${C.ident.t}</th><th>${L('조건','condition')}</th><th>${L('출처','source')}</th></tr>`+R.slice(0,300).map(r=>`<tr><td><b>${fmt(r[2])}</b> ${esc(P().unit)}</td><td>${esc(r[6])}${(r[5]||[]).length?`<div class="q">+ ${esc(r[5].join(', '))}</div>`:''}<div class="q">«${esc(r[7])}»</div></td><td>${idk(r).map(k=>esc(C.ident.nm(k))).join(', ')}</td><td>${C.conds.filter(live).map(c=>esc(c.nm(String(c.get(r))))).join(' · ')}</td><td>${/^10\./.test(r[0])?`<a href="https://doi.org/${esc(r[0])}" target=_blank rel=noopener>doi</a>`:esc(r[0])}</td></tr>`).join('')+`</table>`+(R.length>300?`<div class=dim>${L('위 300줄만 · 전부는 CSV','first 300 rows · all in the CSV')}</div>`:'')}
  function draw(){filters();str();dist();list();$('.mvq').innerHTML=''}
@@ -1335,7 +1335,7 @@ fb.addEventListener('click',e=>{const bt=e.target.closest('button[data-f]');if(!
 #fmbar{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}#fmbar button{font:inherit;font-size:13.5px;padding:5px 13px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer}
 #fmbar button.on{background:#1f2937;color:#fff;border-color:#1f2937}
 #fmbox{display:none}#fmbox .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
-#fmbox select,#fmbox input{font:inherit;font-size:14px;padding:6px 9px;border-radius:9px;border:1px solid #f5b14c;background:var(--bg);color:var(--fg)}
+#fmbox select,#fmbox input{font:inherit;font-size:15px;font-weight:600;padding:7px 10px;border-radius:10px;border:1.5px solid #f5b14c;background:var(--bg);color:var(--fg)}/* 11/1 MXene 찾기·성질 고르기와 같은 모양 */
 #fmbox .go{font:inherit;font-weight:700;padding:6px 16px;border-radius:999px;border:1px solid #f5b14c;background:#f5b14c;color:#1a1300;cursor:pointer}
 #fmbox table{border-collapse:collapse;width:100%;font-size:13px}#fmbox td,#fmbox th{border-top:1px solid var(--border);padding:5px 6px;text-align:left;vertical-align:top}
 #fmbox .q{color:var(--fg-dim);font-size:12.5px}#fmbox a{color:var(--accent)}#fmbox .grp{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}#fmbox .grp span{padding:5px 10px;border:1px solid var(--border);border-radius:10px;font-size:12.5px}
@@ -1354,7 +1354,9 @@ function show(f){bar.querySelectorAll('button').forEach(b=>b.classList.toggle('o
  if(f==='MX'){mxKids().forEach(c=>{if('fmd' in c.dataset){c.style.display=c.dataset.fmd;delete c.dataset.fmd}});box.style.display='none';return}
  mxKids().forEach(c=>{if(!('fmd' in c.dataset))c.dataset.fmd=c.style.display;c.style.display='none'});box.style.display='block';
  const c=C[f],RW=GX.RW[f]||[],PS=c.props.filter(p=>RW.some(r=>r[1]===p.k));if(!PS.length){box.innerHTML='<p class=dim>'+L('이 물질은 아직 찾을 값이 없다','no values to search for this material yet')+'</p>';return}
- box.innerHTML=`<p class="dim" style="margin:0 0 6px">${L('목표값으로 찾기','Find by target value')} — ${esc(c.name)} · ${L('그 값에 닿은 시료와 «어떤 '+c.ident.t+'·조건에서」 · «질문하기」는 MXene 만(이 물질은 «만든 법」 칸이 아직 없다 · 준비 중)','samples that reached the value, and «which '+c.ident.t+' · condition» · «Ask a question» is MXene-only for now (no «how it was made» column for this material yet)')}</p>
+ box.innerHTML=`<div class="v3tabs"><button type="button" disabled title="${L('이 물질은 «만든 법」 칸이 아직 없다 · 준비 중','no «how it was made» column for this material yet · coming')}" style="opacity:.45;cursor:not-allowed">${L('질문하기','Ask')}</button><button type="button" class="on">${L('목표값으로','By target value')}</button></div>
+ <p style="font-weight:700;font-size:16px;margin:12px 0 6px">${L('목표값으로 찾기','Find by target value')} — ${esc(c.name)} · ${L('이 값을 낸 시료는 어떤 '+c.ident.t+'·조건이었나','which '+c.ident.t+' · conditions gave this value')}</p>
+ <p class="dim" style="margin:0 0 6px;font-size:12.5px">${L('«질문하기」는 이 물질의 «만든 법」 칸이 생기면 열린다(준비 중)','«Ask» opens once this material has a «how it was made» column (coming)')}</p>
  <div class="row"><select class="p">${PS.map(p=>`<option value="${p.k}">${esc(p.name)}</option>`).join('')}</select><select class="dir"></select><input class="v" type="number" step="any" style="width:120px"><span class="u dim"></span><button class="go" type="button">${L('찾기','Find')}</button></div><div class="out"></div>`;
  const $=s=>box.querySelector(s),P=()=>PS.find(p=>p.k===$('.p').value);
  const setDir=()=>{const p=P();$('.dir').innerHTML=`<option value="ge">${L('이상(≥)','at least (≥)')}</option><option value="le">${L('이하(≤)','at most (≤)')}</option>`;$('.dir').value=p.low?'le':'ge';$('.u').textContent=p.unit+(p.low?L(' · 낮을수록 좋다',' · lower is better'):'');
@@ -1396,8 +1398,9 @@ const mkb=(t,cls)=>{const b=document.createElement('button');b.type='button';b.c
 /* ① 새 소식 — 위는 단추 한 줄 · 7일 목록은 맨 아래로 */
 const hn=document.querySelector('.hownew'),nb=document.getElementById('newbox'),tl=document.getElementById('tlbox');
 const row=document.createElement('div');row.className='tidyrow';
-if(hn){hn.style.display='none';hn.before(row);
- const b=mkb(L('🆕 10/21 새 기능 ▾','🆕 New on 10/21 ▾'));b.addEventListener('click',()=>{const on=hn.style.display==='none';hn.style.display=on?'':'none';b.innerHTML=on?L('🆕 10/21 새 기능 ▴','🆕 New on 10/21 ▴'):L('🆕 10/21 새 기능 ▾','🆕 New on 10/21 ▾')});row.append(b)}
+if(hn){hn.before(row);
+ const hd=document.createElement('details');hd.id='hownewdet';const hs=document.createElement('summary');hs.innerHTML=L('🗂 지난 소식 — 10/21 새 기능 안내(기록)','🗂 Past notice — new features of Oct 21 (archive)');hd.append(hs);
+ setTimeout(()=>{const anchor=document.getElementById('newdet')||tl;if(anchor)anchor.after(hd);else{const ft=document.querySelector('footer');if(ft)ft.before(hd);else document.body.append(hd)}hd.append(hn);hn.style.display=''},0)}
 if(nb){const det=document.createElement('details');det.id='newdet';
  const cnt=()=>((nb.textContent||'').match(/20\d\d-\d\d-\d\d/g)||[]).length;
  const sm=document.createElement('summary');det.append(sm);
