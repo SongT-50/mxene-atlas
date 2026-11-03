@@ -265,7 +265,7 @@ draw3();
  const h=(location.hash||'').slice(1).toUpperCase();setTab(K.includes(h)?h:'all')})();
 (function(){try{const c=document.getElementById('cards');if(!c)return;
  const KO=document.documentElement.lang!=='en',L=(k,e)=>KO?k:e,V=DATA.vcap||{},rr=x=>(x&&x.rows)||[];
- const F=[['MOF','#0f8a6a',[[DATA.rows.filter(r=>r.i==='MOF'),'bet'],[DATA.co2||[],'co2'],[rr(DATA.mofcap).filter(r=>r.ph==='mof'),'cap'],[V.MOF||[],'vcap']],'#vals'],
+ const F=[['MOF','#0f8a6a',[[DATA.rows.filter(r=>r.i==='MOF'),'bet'],[DATA.co2||[],'co2'],[rr(DATA.mofcap).filter(r=>r.ph==='mof'),'cap'],[rr(DATA.mofdrug),'drug'],[V.MOF||[],'vcap']],'#vals'],
   ['COF','#b5651d',[[DATA.rows.filter(r=>r.i==='COF'),'bet'],[rr(DATA.cofcap),'cap'],[V.COF||[],'vcap']],'#vals'],
   [L('그래핀 · rGO','graphene · rGO'),'#0e8a5f',[[rr(DATA.gr),'k'],[rr(DATA.grcap),'cap'],[rr(DATA.grcond),'k'],[rr(DATA.grbatt),'batt'],[rr(DATA.grtc),'tc'],[V.GR||[],'vcap']],'#gr'],
   [L('TMD · MoS₂ 등','TMD · MoS₂ etc.'),'#a15c00',[[rr(DATA.tmd),'k'],[rr(DATA.tmdcap),'cap'],[rr(DATA.tmdbatt),'batt'],[V.TMD||[],'vcap']],'#tmd'],
