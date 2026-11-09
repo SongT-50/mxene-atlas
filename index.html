@@ -367,12 +367,12 @@ P.forEach(d=>{(d.pc||[]).forEach(k=>{const c=node('c:'+k,'Mixed with: '+PCN[k],'
    .onBackgroundClick(()=>{G3._lock=0;hl(null)}).onNodeHover(n=>{if(G3._lock)return;HL=n?nb(n.id):null;G3.nodeColor(G3.nodeColor()).linkColor(G3.linkColor());el.style.cursor=n?'pointer':''}).nodeLabel(n=>`${{m:'composition ',e:'Etchant ',d:'',f:'',u:'property ',p:'Papers ',c:''}[n.kind]}${n.kind==='u'?(UN[n.name]||n.name):(n.kind==='m'?(n.name==='?'?'composition not stated':SUBF(n.name)):n.name)} · values ${n.n}`).nodeColor(n=>!HL||HL.has(n.id)?COL[n.kind]:'rgba(140,140,160,.15)').nodeRelSize(3).nodeVal(n=>n.kind==='p'?Math.min(1.5,.3+n.n/6):Math.min(18,2+Math.sqrt(n.n)*1.4))
    .linkWidth(l=>Math.min(4,.3+Math.log2(1+l.v)*.6)).linkOpacity(.7).linkColor(l=>!HL?'rgba(154,164,200,.10)':(HL.has(l.source.id||l.source)&&HL.has(l.target.id||l.target))?'#c7d0f0':'rgba(140,140,160,.03)').cooldownTime(3500).onEngineStop(()=>{if(!G3._fit){G3._fit=1;fitCam()}})
    .onNodeClick(n=>{G3._lock=1;hl(n.id);if(n.kind==='p'){const ds=n.pts,d0=ds[0];const link=d0&&d0.d?`<a href="https://doi.org/${esc(d0.d)}" target=_blank>Open source (doi ${esc(d0.d)})</a>`:(/^PMC\d+$/.test(n.name)?`<a href="https://pmc.ncbi.nlm.nih.gov/articles/${esc(n.name)}/" target=_blank>Open source (${esc(n.name)})</a>`:'');
-     const html=`<b>Paper ${esc(n.name)}</b> — values in this tab: ${ds.length} · ${link}`+ds.slice(0,12).map(d=>`<div class=q><b>${esc(VU(d))}</b> · ${esc(d.m)} · ${esc(GN[d.e])} — «${esc(d.q)}»</div>`).join('')+(ds.length>12?`<div class=dim>${ds.length-12} more in the table</div>`:'');
+     const html=`<b>Paper ${esc(n.name)}</b> — values in this tab: ${ds.length} · ${link}`+ds.slice(0,12).map(d=>`<div class=q><b>${esc(VU(d))}</b> · ${esc(d.m)} · ${esc(GN[d.e])} — «${esc(d.q)}»</div>`).join('')+(ds.length>12?`<button type="button" class="gojump" data-all="1">${JL('이 Papers의 Value 전부 보기','all values of this paper')} (${ds.length})</button><div style="display:none">${ds.slice(12).map(d=>`<div class=q><b>${esc(VU(d))}</b> · ${esc(d.m)} · ${esc(GN[d.e])} — «${esc(d.q)}»</div>`).join('')}</div>`:'');
      document.getElementById('panel').innerHTML=html;
      if(fsOn()){const f=document.getElementById('fsinfo');f.innerHTML='<div style="text-align:right"><button onclick="this.closest(\'#fsinfo\').style.display=\'none\'">Close ✕</button></div>'+html;f.style.display='block'}
      else document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'nearest'})}
      else if(n.kind==='u'){const b=document.querySelector(`button[data-k="u"][data-v="${n.unit}"]`);if(b)b.click();document.getElementById('ftgt').focus();document.getElementById('ftgt').scrollIntoView({behavior:'smooth',block:'center'})}
-     else if(n.kind==='m'){const e=(n.name.match(/[A-Z][a-z]?/)||[])[0];if(e&&PT.some(x=>x[0]===e)){S.el=S.el===e?null:e;ptab();net()}}})}
+     else if(n.kind==='m'){const e=(n.name.match(/[A-Z][a-z]?/)||[])[0];if(e&&PT.some(x=>x[0]===e)){S.el=S.el===e?null:e;ptab();net()}document.getElementById('panel').innerHTML=`<b>${esc(n.name)}</b> <button type="button" class="gojump" data-mxmap="1">${JL('이 원소가 든 Value 보기','values with this element')} →</button>`}})}
  G3._fit=0;G3.d3Force('charge').strength(-150);G3.d3Force('link').distance(l=>String(l.source.id||l.source).startsWith('p:')?25:60);G3.graphData(data);labels();clearTimeout(G3._ft);G3._ft=setTimeout(()=>{G3._fit=1;fitCam()},4500)}
 const _draw=draw;draw=function(){_draw();ptab();net()};side();
 window.addEventListener('resize',()=>{const g=document.getElementById('g3');if(G3)G3.width(g.clientWidth).height(g.clientHeight||460)});
@@ -981,9 +981,9 @@ const hn=document.getElementById('hnext');if(hn)[...hn.querySelectorAll('button'
 /* 10/26 NET 점 누르기 — MXene 처럼 이웃만 밝히고(고정) 아래 칸에 값·원문 */
 function netInfo(n){stopRot();G3._lock=1;hl(n.id);const nm=NETMN[n.isl]||n.isl,ps=G3.graphData().nodes.filter(x=>x.gx===6&&x.kind==='p'&&HL.has(x.id));
  const VV=p=>`${HPN[p.k]||p.k} <b>${p.v}</b>`,row=p=>`<div style="margin-top:4px;font-size:12.5px">${VV(p)} · ${esc(p.s)} · ${esc(IDN(n.isl,p.ph))} · ${esc((Array.isArray(p.el)?p.el:[p.el]).map(x=>CDN(n.isl,x)).join(', '))}${p.q?` — <span style="color:#b9bfd6">«${esc(p.q)}»</span>`:''}</div>`;
- if(n.kind==='p'){const u=/^10\./.test(n.name)?`https://doi.org/${esc(n.name)}`:'';show(`<b style="color:#c4b5fd">${esc(nm)} ${L('논문','paper')}</b> ${u?`<a href="${u}" target=_blank>${L('원문 열기','open source')}</a>`:esc(n.name)} — ${L('값','values')} ${n.pts.length}`+n.pts.slice(0,10).map(row).join('')+(n.pts.length>10?`<div style="color:#9aa0b8">${L('그 밖','more')} ${n.pts.length-10}</div>`:''));return}
+ if(n.kind==='p'){const u=/^10\./.test(n.name)?`https://doi.org/${esc(n.name)}`:'';show(`<b style="color:#c4b5fd">${esc(nm)} ${L('논문','paper')}</b> ${u?`<a href="${u}" target=_blank>${L('원문 열기','open source')}</a>`:esc(n.name)} — ${L('값','values')} ${n.pts.length}`+n.pts.slice(0,10).map(row).join('')+(n.pts.length>10?`<button type="button" class="gojump" data-all="1">${L('이 논문의 값 전부 보기','all values of this paper')} (${n.pts.length})</button><div style="display:none">${n.pts.slice(10).map(row).join('')}</div>`:'')+`<div class="gorow">${[...new Set(n.pts.map(x=>x.k))].map(k=>`<button type="button" class="gojump" data-fam="${esc(n.isl)}" data-prop="${esc(k)}">${esc(HPN[k]||k)} ${L('값 보기','values')} →</button>`).join('')}</div>`);return}
  const vs=ps.flatMap(p=>p.pts.filter(x=>n.kind!=='u'||x.k===n.prop)),nums=vs.map(x=>+x.v).filter(x=>!isNaN(x)).sort((a,b)=>a-b);
- show(`<b style="color:${(window.COL||{})[n.kind]||'#fff'}">${esc(n.name)}</b> — ${L('논문','papers')} <b>${ps.length}</b> · ${L('값','values')} ${n.kind==='u'?vs.length:n.n}`+(n.kind==='u'&&nums.length?` · ${L('범위','range')} ${nums[0]}–${nums[nums.length-1]}`:'')+`<br><span style="color:#9aa0b8;font-size:12px">${L('이어진 점만 밝다 · 바탕을 누르면 풀린다 · 보라 작은 점 = 논문(누르면 원문)','only linked points stay lit · click the background to release · small purple dot = paper (click for source)')}</span>`+(n.kind==='u'?vs.slice(0,6).map(row).join(''):''))}
+ show(`<b style="color:${(window.COL||{})[n.kind]||'#fff'}">${esc(n.name)}</b> — ${L('논문','papers')} <b>${ps.length}</b> · ${L('값','values')} ${n.kind==='u'?vs.length:n.n}`+(n.kind==='u'&&nums.length?` · ${L('범위','range')} ${nums[0]}–${nums[nums.length-1]}`:'')+`<br><span style="color:#9aa0b8;font-size:12px">${L('이어진 점만 밝다 · 바탕을 누르면 풀린다 · 보라 작은 점 = 논문(누르면 원문)','only linked points stay lit · click the background to release · small purple dot = paper (click for source)')}</span>`+(n.kind==='u'?vs.slice(0,6).map(row).join(''):'')+`<div class="gorow"><button type="button" class="gojump" data-fam="${esc(n.isl)}" data-prop="${n.kind==='u'?esc(n.prop):''}">${n.kind==='u'?esc(n.name)+' '+L('값 전부 보기','all values'):esc(nm)+' '+L('값 둘러보기','browse values')} →</button></div>`)}
 /* 10/26 오른쪽 색 설명 — 물질을 고르면 그 물질 낱말로(점 종류 색은 MXene 과 같다) */
 let LEG0=null;function legend4(k){const lg=document.querySelector('#hero .hleg');if(!lg)return;if(LEG0===null)LEG0=lg.innerHTML;if(!NETM.has(k)){lg.innerHTML=LEG0;return}const C=window.COL||{};
  const M={TMD:[[C.m,L('상(2H·1T·섞임)','phase (2H · 1T · mixed)')],[C.e,L('조건: 전해질(산성·알칼리)','condition: electrolyte (acid · alkaline)')],[C.u,L('잰 성질(η10·Tafel)','measured property (η10 · Tafel)')],[C.c,L('섞은 재료','mixed with')],[C.p,L('작은 점 = 논문','small dot = paper')]],
@@ -995,7 +995,7 @@ let LEG0=null;function legend4(k){const lg=document.querySelector('#hero .hleg')
 function hubInfo(n){stopRot();const m=G3.graphData().nodes.find(x=>x.id===HMX[n.prop]);
  show(`<b style="color:${n.col}">${esc(n.name)}</b><br>${L('이 은하에서 이 성질을 보여 주는 별(논문)','stars (papers) in this galaxy showing this property')} <b>${n.np}</b> · ${L('값','values')} ${n.n}<br>`+
   (m?`<span style="color:#ffd166">━</span> ${L('같은 성질 MXene 점','same property in MXene')}: <b>${esc(UN[m.name]||m.name)}</b> (${L('값','values')} ${m.n})`:`<span style="color:#9aa0b8">${L('지금 탭에는 같은 성질 MXene 점이 없다','no MXene point with this property in the current tab')}</span>`)+
-  `<br><span style="color:#9aa0b8;font-size:12px">${L('«같은 성질」 = 손으로 쓴 짝(F/g·η10·Tafel·mAh/g·BET) · 물질마다 지시서 글자 대조는 아직','«same property» = hand-written pairs (F/g · η10 · Tafel · mAh/g · BET) · per-material instruction wording not yet compared')}</span>`)}
+  `<br><span style="color:#9aa0b8;font-size:12px">${L('«같은 성질」 = 손으로 쓴 짝(F/g·η10·Tafel·mAh/g·BET) · 물질마다 지시서 글자 대조는 아직','«same property» = hand-written pairs (F/g · η10 · Tafel · mAh/g · BET) · per-material instruction wording not yet compared')}</span>`+(n.isl?`<div class="gorow"><button type="button" class="gojump" data-fam="${esc(n.isl)}" data-prop="${esc(n.prop)}">${esc(n.name)} ${L('값 전부 보기','all values')} →</button></div>`:''))}
 (function(){const wrapB=document.createElement('span');wrapB.style.cssText='position:relative;display:inline-block';
  const btn=document.createElement('button');btn.type='button';btn.dataset.k='view';btn.textContent=L('🔗 연결 보기 ▾','🔗 Links ▾');
  const menu=document.createElement('div');menu.id='gxview';menu.style.cssText='display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:6;background:rgba(13,18,34,.95);border:1px solid #39406a;border-radius:10px;padding:8px 10px;white-space:nowrap;font-size:13px;color:#dfe3f5';
@@ -1415,6 +1415,48 @@ function show(f){CUR=f;bar.querySelectorAll('button').forEach(b=>b.classList.tog
  box.querySelectorAll('.fmexb').forEach(b=>b.addEventListener('click',()=>{$('.p').value=b.dataset.k;setDir();run()}));/* 11/1 MXene 찾기처럼 예시 단추 · 누르면 그 성질의 상위(또는 하위) 25% 문턱으로 바로 찾는다 */$('.p').addEventListener('change',()=>{setDir();run()});$('.go').addEventListener('click',run);$('.v').addEventListener('keydown',e=>{if(e.key==='Enter')run()});$('.dir').addEventListener('change',run);setDir();run()}
 bar.addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(b)show(b.dataset.f)});
 }catch(e){console.error('findmat layer',e)}})();
+</script>
+
+<style>
+.gojump{display:inline-block;margin:8px 6px 0 0;padding:6px 12px;border-radius:999px;border:1.5px solid currentColor;background:transparent;color:inherit;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.gojump:hover{opacity:.75}
+.gorow{margin-top:4px}
+</style>
+<script>
+(function(){
+ const EN=document.documentElement.lang==='en';
+ window.JL=(k,e)=>EN?e:k;
+ const vis=e=>e&&e.offsetParent!==null;
+ const wait=(f,ms)=>new Promise(r=>{const t0=Date.now();(function p(){const v=f();if(v||Date.now()-t0>ms)return r(v);setTimeout(p,80)})()});
+ const mark=h=>{try{history.replaceState(null,'',h)}catch(e){}};
+ /* 이웃 물질 — 그 물질의 «성질 둘러보기」로 가서 성질을 골라 둔다 */
+ window.atlasGo=async function(fam,prop){
+  const b=document.querySelector(`#famb button[data-f="${fam}"]`);if(!b)return false;
+  b.click();
+  const sel=await wait(()=>[...document.querySelectorAll('.mvsel')].find(vis),3000);
+  if(!sel)return false;
+  if(prop&&[...sel.options].some(o=>o.value===prop)&&sel.value!==prop){sel.value=prop;sel.dispatchEvent(new Event('change',{bubbles:true}))}
+  const w=sel.closest('.mvw')||sel;w.scrollIntoView({behavior:'smooth',block:'start'});
+  mark('#mv='+encodeURIComponent(fam+','+(sel.value||'')));return true};
+ /* MXene — 그 성질 탭으로 */
+ window.atlasGoMX=async function(u){
+  const m=document.querySelector('#famb button[data-f="MX"]');if(m)m.click();
+  const b=await wait(()=>document.querySelector(`button[data-k="u"][data-v="${CSS.escape(u)}"]`),3000);
+  if(!b)return false;b.click();
+  (document.getElementById('map')||b).scrollIntoView({behavior:'smooth',block:'start'});
+  mark('#mx='+encodeURIComponent(u));return true};
+ document.addEventListener('click',e=>{
+  const g=e.target.closest('.gojump');if(!g)return;e.preventDefault();e.stopPropagation();
+  if(g.dataset.all){const h=g.nextElementSibling;if(h)h.style.display='';g.remove();return}
+  if(g.dataset.mxmap){try{if(typeof draw==='function')draw()}catch(x){}(document.getElementById('map')||g).scrollIntoView({behavior:'smooth',block:'start'});return}
+  if(g.dataset.fam)window.atlasGo(g.dataset.fam,g.dataset.prop||'')});
+ /* 주소로 들어오면 그 자리로 */
+ const go=async()=>{const m=/^#(mv|mx)=(.+)$/.exec(location.hash||'');if(!m)return;
+  await wait(()=>document.querySelector('#famb button'),15000);
+  const v=decodeURIComponent(m[2]);
+  if(m[1]==='mv'){const i=v.indexOf(',');window.atlasGo(i<0?v:v.slice(0,i),i<0?'':v.slice(i+1))}else window.atlasGoMX(v)};
+ if(document.readyState==='complete')go();else window.addEventListener('load',go);
+})();
 </script>
 
 <style>
