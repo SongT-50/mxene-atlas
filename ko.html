@@ -1421,68 +1421,129 @@ bar.addEventListener('click',e=>{const b=e.target.closest('button[data-f]');if(b
 .gojump{display:inline-block;margin:8px 6px 0 0;padding:6px 12px;border-radius:999px;border:1.5px solid currentColor;background:transparent;color:inherit;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
 .gojump:hover{opacity:.75}
 .gorow{margin-top:4px}
-
-#gocard{position:fixed;top:84px;right:24px;width:330px;max-height:62vh;overflow:auto;z-index:9999;background:#fff;color:#1a1a24;border:1px solid #2f5bd3;border-left:5px solid #2f5bd3;border-radius:10px;padding:14px 16px;box-shadow:0 8px 24px rgba(0,0,0,.28);font-size:14.5px;line-height:1.5}
-#gocard b{font-size:16px}#gocard a{color:#2f5bd3}#gocard .gojump{color:#2f5bd3}
-#gocard .gox{float:right;background:none;border:0;font-size:16px;cursor:pointer;color:#555}
-@media (max-width:640px){#gocard{top:auto;bottom:12px;left:12px;right:12px;width:auto;max-height:45vh}}
+#godraw{position:fixed;top:0;right:0;bottom:0;width:min(600px,100vw);overflow:auto;z-index:9999;background:#fff;color:#1a1a24;border-left:1px solid #d4d4dc;box-shadow:-8px 0 28px rgba(0,0,0,.25);padding:20px 22px 40px;font-size:15px;line-height:1.55;font-family:Pretendard,system-ui,'Malgun Gothic',sans-serif}
+#godraw h3{font-size:20px;margin:0 0 4px;padding-right:34px;overflow-wrap:anywhere}
+#godraw h4{font-size:15px;margin:18px 0 6px;padding-bottom:4px;border-bottom:1px solid #d4d4dc}
+#godraw .sub{color:#5b6172;font-size:13.5px}
+#godraw .gox{position:absolute;top:14px;right:16px;background:none;border:0;font-size:20px;cursor:pointer;color:#555}
+#godraw .gorw{padding:8px 0;border-bottom:1px solid #eceef1}
+#godraw .gorw b{font-size:16px}
+#godraw .qt{display:block;margin-top:3px;font-style:italic;font-size:13.5px;color:#333}
+#godraw a,#godraw .lnk{color:#2f5bd3;cursor:pointer;background:none;border:0;padding:0;font:inherit;text-decoration:underline}
+#godraw table{border-collapse:collapse;width:100%;font-size:14px}
+#godraw td,#godraw th{padding:5px 6px;border-bottom:1px solid #eceef1;text-align:left;vertical-align:top}
+#godraw th{color:#5b6172;font-weight:600}
+#godraw .gojump{color:#2f5bd3}
+#godraw .rank{color:#0e7a55;font-size:13px;font-weight:700}
 </style>
 <script>
 (function(){
  const EN=document.documentElement.lang==='en';
- window.JL=(k,e)=>EN?e:k;
+ const JL=window.JL=(k,e)=>EN?e:k;
  const vis=e=>e&&e.offsetParent!==null;
  const wait=(f,ms)=>new Promise(r=>{const t0=Date.now();(function p(){const v=f();if(v||Date.now()-t0>ms)return r(v);setTimeout(p,80)})()});
  const mark=h=>{try{history.replaceState(null,'',h)}catch(e){}};
- /* 이웃 물질 — 그 물질의 «성질 둘러보기」로 가서 성질을 골라 둔다 */
+ const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+ /* 전체 분포 화면으로 가는 길은 패널 안 단추로 남긴다 */
  window.atlasGo=async function(fam,prop){
-  const b=document.querySelector(`#famb button[data-f="${fam}"]`);if(!b)return false;
-  b.click();
-  const sel=await wait(()=>[...document.querySelectorAll('.mvsel')].find(vis),3000);
-  if(!sel)return false;
+  const b=document.querySelector(`#famb button[data-f="${fam}"]`);if(!b)return false;b.click();
+  const sel=await wait(()=>[...document.querySelectorAll('.mvsel')].find(vis),3000);if(!sel)return false;
   if(prop&&[...sel.options].some(o=>o.value===prop)&&sel.value!==prop){sel.value=prop;sel.dispatchEvent(new Event('change',{bubbles:true}))}
-  const w=sel.closest('.mvw')||sel;w.scrollIntoView({behavior:'smooth',block:'start'});
-  mark('#mv='+encodeURIComponent(fam+','+(sel.value||'')));return true};
- /* MXene — 그 성질 탭으로 */
+  (sel.closest('.mvw')||sel).scrollIntoView({behavior:'smooth',block:'start'});mark('#mv='+encodeURIComponent(fam+','+(sel.value||'')));return true};
  window.atlasGoMX=async function(u){
   const m=document.querySelector('#famb button[data-f="MX"]');if(m)m.click();
-  const b=await wait(()=>document.querySelector(`button[data-k="u"][data-v="${CSS.escape(u)}"]`),3000);
-  if(!b)return false;b.click();
-  (document.getElementById('map')||b).scrollIntoView({behavior:'smooth',block:'start'});
-  mark('#mx='+encodeURIComponent(u));return true};
- const E=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
- const box=document.createElement('div');box.id='gocard';box.style.display='none';
- const hideCard=()=>{box.style.display='none'};
- function card(h){(document.fullscreenElement||document.body).append(box);box.innerHTML='<button type="button" class="gox" aria-label="close">✕</button>'+h;box.style.display='block'}
- const B=(a,t)=>`<button type="button" class="gojump" ${a}>${E(t)} →</button>`;
- const uName=u=>{try{return typeof uname==='function'?uname(u):u}catch(x){return u}};
- const paperLink=(id,doi)=>{const d=doi||(/^10\./.test(id)?id:'');return d?`<a href="https://doi.org/${E(d)}" target="_blank" rel="noopener">${JL('원문 열기','open source')}</a>`:(/^PMC\d+$/.test(id)?`<a href="https://pmc.ncbi.nlm.nih.gov/articles/${E(id)}/" target="_blank" rel="noopener">${JL('원문 열기','open source')}</a>`:'')};
- function build(n){
+  const b=await wait(()=>document.querySelector(`button[data-k="u"][data-v="${CSS.escape(u)}"]`),3000);if(!b)return false;b.click();
+  (document.getElementById('map')||b).scrollIntoView({behavior:'smooth',block:'start'});mark('#mx='+encodeURIComponent(u));return true};
+ /* 자료: 판정이 틀렸다고 본 값은 순위·통계에서 뺀다 */
+ const cleanQ=q=>String(q||'').replace(/^(\s*\[[^\]]*\]\s*)+/,m=>(m.match(/\[(?:⚠|surface-modified|impurity)[^\]]*\]\s*/g)||[]).join(''));
+ const uN=u=>{try{return typeof uname==='function'?uname(u):u}catch(x){return u}};
+ let cache={};
+ function rows(src){
+  if(cache[src])return cache[src];
+  let R;
+  if(src==='MX')R=D.filter(d=>!String(d.s||'').startsWith('judged_error')&&typeof d.v==='number').map(d=>({pid:d.p,doi:d.d,prop:d.u,pn:uN(d.u),v:d.v,txt:(d.op&&d.op!=='='?d.op:'')+(d.vr||d.v)+' '+(d.ur||d.u),mat:d.m,sample:d.l,cond:[d.elyte,d.cell].filter(x=>x&&x!=='not stated').join(' · '),q:d.q,etch:d.e,hw:d.hw,chk:d.chk||/\[⚠/.test(d.q||'')}));
+  else{const nodes=G3.graphData().nodes,nm={};nodes.forEach(n=>{if(n.gx===6&&n.kind==='u'&&n.isl===src)nm[n.prop]=String(n.name).replace(/^[^·]*·\s*/,'')});
+   R=(GX.RW[src]||[]).filter(r=>typeof r[2]==='number').map(r=>({pid:r[0],doi:/^10\./.test(r[0])?r[0]:'',prop:r[1],pn:({emi:JL('전자파 차폐 dB','EMI shielding dB')})[r[1]]||nm[r[1]]||r[1],v:r[2],txt:r[2]+'',mat:r[3],sample:r[6],cond:(Array.isArray(r[4])?r[4]:[r[4]]).filter(Boolean).join(' · '),q:GXQT(r),raw:r}))}
+  return cache[src]=R}
+ window.addEventListener('gxq',()=>{for(const k in cache)if(k!=='MX')delete cache[k]});
+ const LOW=/η|overpot|tafel|sheet res|resistiv|Ω|limit|response time|응답 시간|검출|저항|과전압/i;
+ const isLow=(p,n)=>LOW.test(String(p)+' '+String(n||''));
+ const med=a=>{const s=[...a].sort((x,y)=>x-y),n=s.length;return n?(n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2):NaN};
+ const q=(a,f)=>{const s=[...a].sort((x,y)=>x-y);return s[Math.min(s.length-1,Math.floor(f*s.length))]};
+ const F=x=>{if(!isFinite(x))return '';const a=Math.abs(x);return a>=100?Math.round(x).toLocaleString('en-US'):a>=1?(+x.toFixed(2))+'':(+x.toPrecision(2))+''};
+ const box=document.createElement('div');box.id='godraw';box.style.display='none';
+ const close=()=>{box.style.display='none'};
+ function open(h){(document.fullscreenElement||document.body).append(box);box.innerHTML='<button type="button" class="gox" aria-label="close">✕</button>'+h;box.style.display='block';box.scrollTop=0}
+ const lnk=(src,t,id,txt)=>`<button type="button" class="lnk" data-s="${E(src)}" data-t="${t}" data-i="${E(id)}">${E(txt)}</button>`;
+ const paperA=(pid,doi)=>{const d=doi||(/^10\./.test(pid)?pid:'');const u=d?'https://doi.org/'+d:(/^PMC\d+$/.test(pid)?'https://pmc.ncbi.nlm.nih.gov/articles/'+pid+'/':'');return u?`<a href="${E(u)}" target="_blank" rel="noopener">${JL('원문 열기','open source')}</a>`:''};
+ const shortId=p=>String(p).length>30?String(p).slice(0,28)+'…':String(p);
+ const row=(src,r,extra)=>`<div class="gorw"><b>${E(r.txt)}</b> ${extra||''}<br>${lnk(src,'m',r.mat,r.mat||'?')} · ${E(String(r.sample||'').slice(0,70))}${r.cond?` <span class="sub">· ${E(String(r.cond).slice(0,60))}</span>`:''}<span class="qt">«${E(cleanQ(r.q).slice(0,260))}»</span><span class="sub">${lnk(src,'p',r.pid,shortId(r.pid))}</span></div>`;
+ const goBtn=(src,prop)=>src==='MX'?`<button type="button" class="gojump" data-mx="${E(prop)}">${JL('전체 분포 차트로','open full distribution')} →</button>`:`<button type="button" class="gojump" data-fam="${E(src)}" data-prop="${E(prop)}">${JL('전체 분포 차트로','open full distribution')} →</button>`;
+ function showProp(src,prop){const A=rows(src).filter(r=>r.prop===prop);if(!A.length)return;
+  const low=isLow(prop,A[0].pn),v=A.map(r=>r.v),nchk=A.filter(r=>r.chk).length,top=A.filter(r=>!r.chk).sort((a,b)=>low?a.v-b.v:b.v-a.v).slice(0,8);
+  const g={};A.forEach(r=>(g[r.mat]=g[r.mat]||[]).push(r.v));
+  const mats=Object.entries(g).sort((a,b)=>b[1].length-a[1].length).slice(0,8);
+  open(`<h3>${E(A[0].pn)}</h3><div class="sub">${A.length.toLocaleString('en-US')} ${JL('값','values')} · ${new Set(A.map(r=>r.pid)).size.toLocaleString('en-US')} ${JL('논문','papers')} · ${JL('가운데값','median')} <b>${F(med(v))}</b> · ${JL('중간 80%','middle 80%')} ${F(q(v,.1))}–${F(q(v,.9))}</div>
+  <div class="gorow">${goBtn(src,prop)}</div>
+  <h4>${low?JL('가장 낮은 값 8개','8 lowest values'):JL('가장 높은 값 8개','8 highest values')}</h4><div class="sub">${JL('측정 조건이 달라 바로 견줄 수 없다 · 극단값은 원문을 확인할 것','conditions differ, so do not compare directly · check extreme values against the source')}${nchk?` · ${JL('경고 표시','flagged')} ${nchk}${JL('개는 순위에서 뺐다',' left out of this ranking')}`:''}</div>${top.map(r=>row(src,r)).join('')}
+  <h4>${JL('물질별','By material')}</h4><table><tr><th>${JL('물질','material')}</th><th>${JL('값 수','values')}</th><th>${JL('가운데값','median')}</th></tr>${mats.map(([m,a])=>`<tr><td>${lnk(src,'m',m,m||'?')}</td><td>${a.length}</td><td>${F(med(a))}</td></tr>`).join('')}</table>`);
+  mark('#d='+encodeURIComponent(src+'|u|'+prop))}
+ function showMat(src,mat,title){const A=rows(src).filter(r=>r.mat===mat);if(!A.length)return;
+  const g={};A.forEach(r=>(g[r.prop]=g[r.prop]||[]).push(r));
+  const P=Object.entries(g).sort((a,b)=>b[1].length-a[1].length);
+  const et={};A.forEach(r=>{if(r.etch)et[r.etch]=(et[r.etch]||0)+1});
+  const ets=Object.entries(et).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const pp={};A.forEach(r=>pp[r.pid]=(pp[r.pid]||0)+1);
+  const tp=Object.entries(pp).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  open(`<h3>${E(title||mat)}</h3><div class="sub">${A.length.toLocaleString('en-US')} ${JL('값','values')} · ${Object.keys(pp).length.toLocaleString('en-US')} ${JL('논문','papers')} · ${P.length} ${JL('성질','properties')}</div>
+  <h4>${JL('성질별 값','Values by property')}</h4><table><tr><th>${JL('성질','property')}</th><th>${JL('값 수','values')}</th><th>${JL('가운데값','median')}</th><th>${JL('최고','best')}</th></tr>${P.map(([p,a])=>{const low=isLow(p,a[0].pn),v=a.map(r=>r.v);return `<tr><td>${lnk(src,'u',p,a[0].pn)}</td><td>${a.length}</td><td>${F(med(v))}</td><td>${F(low?Math.min(...v):Math.max(...v))}</td></tr>`}).join('')}</table>
+  ${ets.length?`<h4>${JL('많이 쓴 제조법(식각)','Most used etching routes')}</h4><div>${ets.map(([k,n])=>`${E(k)} <span class="sub">(${n})</span>`).join(' · ')}</div>`:''}
+  <h4>${JL('값이 많은 논문','Papers with most values')}</h4><div>${tp.map(([p,n])=>`${lnk(src,'p',p,shortId(p))} <span class="sub">(${n})</span>`).join('<br>')}</div>`);
+  mark('#d='+encodeURIComponent(src+'|m|'+mat))}
+ function showPaper(src,pid){const all=rows(src),A=all.filter(r=>r.pid===pid);if(!A.length)return;
+  const rank=r=>{const S=all.filter(x=>x.prop===r.prop);if(S.length<20)return '';const low=isLow(r.prop,r.pn),b=S.filter(x=>low?x.v<r.v:x.v>r.v).length;return `<span class="rank">${JL('상위','top')} ${Math.max(1,Math.ceil((b+1)/S.length*100))}%</span> <span class="sub">(${S.length.toLocaleString('en-US')} ${JL('값 중','values')})</span>`};
+  const g={};A.forEach(r=>(g[r.prop]=g[r.prop]||[]).push(r));
+  const hw=A.map(r=>r.hw).find(h=>h&&Array.isArray(h.st)&&h.st.some(s=>s&&s.t));
+  open(`<h3>${E(shortId(pid))}</h3><div class="sub">${A.length} ${JL('값','values')} · ${Object.keys(g).length} ${JL('성질','properties')} · ${paperA(pid,A[0].doi)}</div>
+  ${hw?`<h4>${JL('만든 법','How it was made')}${hw.sm?` <span class="sub">— ${E(String(hw.sm).slice(0,60))}</span>`:''}</h4><div>${hw.st.filter(s=>s&&s.t).slice(0,6).map(s=>`<div class="sub"><b>${E(s.k)}</b>: ${E(String(s.t).slice(0,180))}</div>`).join('')}</div>`:''}
+  ${Object.entries(g).map(([p,a])=>`<h4>${lnk(src,'u',p,a[0].pn)}</h4>${a.slice(0,30).map(r=>row(src,r,rank(r))).join('')}`).join('')}`);
+  mark('#d='+encodeURIComponent(src+'|p|'+pid))}
+ function showSet(title,src,pts){/* 식각법·층 분리·이웃 물질의 조건 점: 이어진 값을 성질별로 */
+  const keys=new Set(pts);const A=rows(src).filter(r=>keys.has(r.pid));const nA=new Set(A.map(r=>r.pid)).size;
+  const g={};A.forEach(r=>(g[r.prop]=g[r.prop]||[]).push(r));
+  open(`<h3>${E(title)}</h3><div class="sub">${nA.toLocaleString('en-US')} ${JL('논문','papers')}</div><h4>${JL('이어진 논문의 성질','Properties in linked papers')}</h4><table><tr><th>${JL('성질','property')}</th><th>${JL('값 수','values')}</th><th>${JL('가운데값','median')}</th></tr>${Object.entries(g).sort((a,b)=>b[1].length-a[1].length).map(([p,a])=>`<tr><td>${lnk(src,'u',p,a[0].pn)}</td><td>${a.length}</td><td>${F(med(a.map(r=>r.v)))}</td></tr>`).join('')}</table>`)}
+ const show=(s,t,i)=>t==='u'?showProp(s,i):t==='m'?showMat(s,i):showPaper(s,i);
+ function fromNode(n){
   if(n.gx===6){
-   if(n.kind==='p'){const nodes=G3.graphData().nodes,nm=k=>{const u=nodes.find(x=>x.gx===6&&x.kind==='u'&&x.isl===n.isl&&x.prop===k);return u?u.name:k};
-    card(`<b>${JL('논문','Paper')}</b> ${E(n.name)}<br>${JL('값','values')} ${n.pts.length} · ${paperLink(n.name)}<div class="gorow">`+[...new Set(n.pts.map(x=>x.k))].map(k=>B(`data-fam="${E(n.isl)}" data-prop="${E(k)}"`,nm(k))).join('')+'</div>');return}
-   card(`<b>${E(n.name)}</b><div class="gorow">`+B(`data-fam="${E(n.isl)}" data-prop="${n.kind==='u'?E(n.prop):''}"`,n.kind==='u'?JL('이 성질 값 전부 보기','all values of this property'):JL('이 물질 값 둘러보기','browse this material'))+'</div>');return}
-  if(n.gx){if(n.isl)card(`<b>${E(n.name)}</b><div class="gorow">`+B(`data-fam="${E(n.isl)}" data-prop="${E(n.prop||'')}"`,JL('값 보기','see values'))+'</div>');return}
-  if(n.kind==='p'){const ds=n.pts||[];card(`<b>${JL('논문','Paper')}</b> ${E(n.name)}<br>${JL('값','values')} ${ds.length} · ${paperLink(n.name,ds[0]&&ds[0].d)}<div class="gorow">`+[...new Set(ds.map(d=>d.u))].map(u=>B(`data-mx="${E(u)}"`,uName(u))).join('')+'</div>');return}
-  if(n.kind==='u'){card(`<b>${E(uName(n.unit)||n.name)}</b><div class="gorow">`+B(`data-mx="${E(n.unit)}"`,JL('이 성질 값 보기','see values of this property'))+B(`data-find="${E(n.unit)}"`,JL('목표값으로 찾기','find by target value'))+'</div>');return}
-  card(`<b>${E(n.name)}</b><div class="gorow">`+B('data-mxmap="1"',n.kind==='m'?JL('이 원소가 든 값 보기','values with this element'):JL('지도에서 값 보기','see values on the map'))+'</div>')}
- /* 3D 가 나중에 만들어지고 다른 층이 클릭을 다시 감싸므로 살펴보다가 감싼다 */
+   if(n.kind==='p')return showPaper(n.isl,n.name);
+   if(n.kind==='u')return showProp(n.isl,n.prop);
+   const pp=G3.graphData().nodes.filter(x=>x.gx===6&&x.kind==='p'&&typeof HL!=='undefined'&&HL&&HL.has(x.id)).map(x=>x.name);
+   if(n.kind==='m'&&rows(n.isl).some(r=>r.mat===n.name))return showMat(n.isl,n.name);
+   return showSet(n.name,n.isl,pp)}
+  if(n.gx)return n.isl&&n.prop?showProp(n.isl,n.prop):undefined;
+  if(n.kind==='p'){const d=(n.pts||[])[0];return d&&showPaper('MX',d.p)}
+  if(n.kind==='u')return showProp('MX',n.unit);
+  if(n.kind==='m')return showMat('MX',n.name);
+  const f={e:'e',d:'dl',f:'fm'}[n.kind],sf=String(n.id||'').split(':').slice(1).join(':');
+  const pp=f?[...new Set(D.filter(x=>x[f]===sf||x[f]===n.name).map(x=>x.p))]:[];if(pp.length)showSet(n.name,'MX',pp);else close()}
+ /* 3D 는 나중에 만들어지고 다른 층이 클릭을 다시 감싸므로 살펴보다가 감싼다 */
  setInterval(()=>{if(typeof G3==='undefined'||!G3)return;const o=G3.onNodeClick();if(!o||o._jw)return;
-  const f=(n,ev)=>{if(!n.gx&&n.kind==='u'){G3._lock=1;if(typeof hl==='function')hl(n.id)}else o(n,ev);try{build(n)}catch(x){console.error('gocard',x)}};f._jw=1;G3.onNodeClick(f)},800);
+  const f=(n,ev)=>{if(!n.gx&&(n.kind==='u'||n.kind==='m')){G3._lock=1;if(typeof hl==='function')hl(n.id)}else o(n,ev);try{fromNode(n)}catch(x){console.error('godraw',x)}};f._jw=1;G3.onNodeClick(f)},800);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
  document.addEventListener('click',e=>{
-  if(e.target.closest('.gox')){hideCard();return}
+  if(e.target.closest('#godraw .gox')){close();return}
+  const l=e.target.closest('#godraw .lnk');if(l){show(l.dataset.s,l.dataset.t,l.dataset.i);return}
   const g=e.target.closest('.gojump');if(!g)return;e.preventDefault();e.stopPropagation();
-  if(g.closest('#gocard'))hideCard();
+  if(g.closest('#godraw'))close();
   if(g.dataset.mx){window.atlasGoMX(g.dataset.mx);return}
-  if(g.dataset.find){const b=document.querySelector(`button[data-k="u"][data-v="${CSS.escape(g.dataset.find)}"]`);if(b)b.click();const t=document.getElementById('ftgt');if(t){t.focus();t.scrollIntoView({behavior:'smooth',block:'center'})}return}
   if(g.dataset.all){const h=g.nextElementSibling;if(h)h.style.display='';g.remove();return}
   if(g.dataset.mxmap){try{if(typeof draw==='function')draw()}catch(x){}(document.getElementById('map')||g).scrollIntoView({behavior:'smooth',block:'start'});return}
   if(g.dataset.fam)window.atlasGo(g.dataset.fam,g.dataset.prop||'')});
  /* 주소로 들어오면 그 자리로 */
- const go=async()=>{const m=/^#(mv|mx)=(.+)$/.exec(location.hash||'');if(!m)return;
-  await wait(()=>document.querySelector('#famb button'),15000);
-  const v=decodeURIComponent(m[2]);
-  if(m[1]==='mv'){const i=v.indexOf(',');window.atlasGo(i<0?v:v.slice(0,i),i<0?'':v.slice(i+1))}else window.atlasGoMX(v)};
+ const go=async()=>{const m=/^#(mv|mx|d)=(.+)$/.exec(location.hash||'');if(!m)return;
+  await wait(()=>document.querySelector('#famb button'),15000);const v=decodeURIComponent(m[2]);
+  if(m[1]==='d'){const a=v.split('|');await wait(()=>typeof G3!=='undefined'&&G3&&G3.graphData().nodes.length,15000);show(a[0],a[1],a.slice(2).join('|'))}
+  else if(m[1]==='mv'){const i=v.indexOf(',');window.atlasGo(i<0?v:v.slice(0,i),i<0?'':v.slice(i+1))}else window.atlasGoMX(v)};
  if(document.readyState==='complete')go();else window.addEventListener('load',go);
 })();
 </script>
