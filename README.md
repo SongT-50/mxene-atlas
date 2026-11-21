@@ -1,4 +1,4 @@
-# MXene Atlas (early stage)
+# Evidence-Linked Materials Map (early stage) — its MXene part is the MXene Atlas
 
 An open, evidence-linked map of reported MXene properties: which MXene, made how, gives which property.
 Every value links to the sentence it came from (with the paper's DOI), so it can be checked against the original.
@@ -17,6 +17,6 @@ No human expert check yet, so nothing is labelled "verified".
 (rights holders who would like a paper's sentences removed: requests are handled promptly).
 Earlier comments (before 2026-10-17) are at https://github.com/SongT-50/mxene-3d/issues.
 
-**Licence.** Values table (the CSV you download from the map): CC BY 4.0 — credit: Song, T.-E. MXene Atlas (2026). Quoted source sentences: each paper's own licence. Map screens, code and text: © 2026 Tae-Eun Song, all rights reserved — linking is welcome; please do not copy or redistribute them without permission.
+**Licence.** Values table (the CSV you download from the map): CC BY 4.0 — credit: Song, T.-E. Evidence-Linked Materials Map (MXene Atlas) (2026). Quoted source sentences: each paper's own licence. Map screens, code and text: © 2026 Tae-Eun Song, all rights reserved — linking is welcome; please do not copy or redistribute them without permission.
 
-**How to cite.** Song, T.-E. *MXene Atlas* (2026). https://songt-50.github.io/mxene-atlas/ (first published 2026-10-11)
+**How to cite.** Song, T.-E. *Evidence-Linked Materials Map* (MXene Atlas) (2026). https://songt-50.github.io/mxene-atlas/ (first published 2026-10-11)
